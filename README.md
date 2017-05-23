@@ -8,9 +8,10 @@ The MathUtil library provides useful math functions
 
 # Exceptions
 Please notice that there are few exceptions:
-   1. Sigma function
-      Case: negative number, such as -a
-      Solved: Written explicitly in form 0-a
+   1. Sigma function  
+
+      Case: negative number, such as -a  
+      Solved: Written explicitly in form 0-a  
       
-      Case: square root, such as sqrt(a)
-      Solved: Written explicitly in form a^(1/2)
+      Case: square root, such as sqrt(a)  
+      Solved: Written explicitly in form a^(1/2)  
