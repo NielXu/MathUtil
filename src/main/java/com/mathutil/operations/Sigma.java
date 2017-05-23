@@ -141,15 +141,15 @@ public class Sigma {
 			//If it is the operator
 			else if(tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '^'){
 				while (!ops.empty() && hasPrecedence(tokens[i], ops.peek())){
-	                  vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
+					vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 				}
-	            // Push current token to 'ops'.
+				// Push current token to 'ops'.
 	            ops.push(tokens[i]);
 			}
 		}
 		//Do the final operation
 		while (!ops.empty()){
-            vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
+			vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 		}
 		//Return the final value
 		return vals.pop();
