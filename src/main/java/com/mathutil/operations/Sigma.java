@@ -143,8 +143,9 @@ public class Sigma {
 				while (!ops.empty() && hasPrecedence(tokens[i], ops.peek())){
 					vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 				}
+				
 				// Push current token to 'ops'.
-	            ops.push(tokens[i]);
+				ops.push(tokens[i]);
 			}
 		}
 		//Do the final operation
@@ -183,7 +184,7 @@ public class Sigma {
         case '*':
             return val2 * val1;
         case '/':
-            if (val2 == 0)
+            if (val1 == 0)
                 throw new
                 UnsupportedOperationException("Cannot divide by zero");
             return val2 / val1;
