@@ -8,14 +8,14 @@ import com.mathutil.exceptions.ExpressionException;
 /**
  * Calculating the sum using Sigma notation.
  * @author danielxu
- * @version 0.0.1
+ * @version 0.0.2
  */
 public class Sigma {
 
 	private Sigma() {}
 	
 	/**
-	 * Calculating the sum using Sigma(∑) notation. The sum will be calculated from i to n (i, n are inclusive, n>=i) by the following way: 
+	 * Calculating the sum using Sigma(∑) notation. <strong>The variable name must be x</strong>. The sum will be calculated from i to n (i, n are inclusive, n>=i) by the following way: 
 	 * n∑i(Expression). This sum method return type double as the result, it has higher accurancy. However, when facing the large number 
 	 * calculation, please use <code>longsum()</code> method instead.<br>
 	 * The expression must be in the original form, which means, the operators(* + - / ^) must be explicitly included in the expression. 
@@ -26,20 +26,20 @@ public class Sigma {
 	 * <center> a(1+a)^2 </center> <br>
 	 * The expression can contain empty spaces since they will be removed during the calculation process. The variable can be any String except for 
 	 * special numbers: pi, e
+	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
 	 * @param exp - The expression
-	 * @param varName - The variable name in the expression, such as x, a, t and so on, can also be a name that has length greater than one
 	 * @return The sum using Sigma notation, as double
 	 * @see #longsum(int, int, String, String)
 	 */
-	public static double sum(int low , int high , String exp , String varName){
-		exp = validate(low , high , exp , varName);
+	public static double sum(int low , int high , String exp){
+		exp = validate(low , high , exp);
 		return calculate(low , high , exp , true);
 	}
 	
 	/**
-	 * Calculating the sum using Sigma(∑) notation. The sum will be calculated from i to n (i, n are inclusive, n>=i) by the following way: 
+	 * Calculating the sum using Sigma(∑) notation.<strong>The variable name must be x</strong>. The sum will be calculated from i to n (i, n are inclusive, n>=i) by the following way: 
 	 * n∑i(Expression). This sum method return type long as the result, it has lower accurancy but can do the large number operation. However, 
 	 * when higher accurancy is required, please use <code>sum()</code> method instead.<br>
 	 * The expression must be in the original form, which means, the operators(* + - / ^) must be explicitly included in the expression. 
@@ -48,36 +48,35 @@ public class Sigma {
 	 * <center>a*(1+a)^2 </center> <br>
 	 * An example of the incorrect expression:<br>
 	 * <center> a(1+a)^2 </center> <br>
-	 * The expression can contain empty spaces since they will be removed during the calculation process. The variable can be any String except for 
-	 * special numbers: pi, e
+	 * The expression can contain empty spaces since they will be removed during the calculation process.<br>
+	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
 	 * @param exp - The expression
-	 * @param varName - The variable name in the expression, such as x, a, t and so on, can also be a name that has length greater than one
 	 * @return The sum using Sigma notation, as long
 	 * @see #sum(int, int, String, String)
 	 */
-	public static long longsum(int low , int high , String exp , String varName){
-		exp = validate(low , high , exp , varName);
+	public static long longsum(int low , int high , String exp){
+		exp = validate(low , high , exp);
 		return calculate(low , high , exp);
 	}
 	
 	/*
 	 * Check if the expression is valid or not
 	 */
-	private static String validate(int low , int high , String exp , String varName){
+	private static String validate(int low , int high , String exp){
 		if (low > high) throw new BoundException("Lower bound cannot be greater than upper bound");
 		if(exp == null || exp.equals("")) throw new ExpressionException("Expression cannot be null or empty");
-		if(varName == null || exp.equals("")) throw new ExpressionException("Variable name cannot be null or empty");
 		
-		//Replace the variable name to x, in order to deal with the situation that the length of the varName is greater than one.
-		exp = exp.replace(varName, "x");
+		if(!check(exp)) throw new ExpressionException("Parenthesis missing in the expression");
 		//Repalce whitespaces and some special notations
 		exp = exp.replace(" ", "");
+		exp = exp.replace("sin(", "~"); //Replace sin( to ~
+		exp = exp.replace("cos(", "&"); //Replace cos( to &
+		exp = exp.replace("tan(", "@"); //Repalce tan( to @
 		exp = exp.replace("e", String.valueOf(Math.E)); //Replace 'e' to natural number e
 		exp = exp.replace("pi", String.valueOf(Math.PI));//Replace 'pi' to pi
 		//Check if the parenthesis is symmetry or not
-		if(!check(exp)) throw new ExpressionException("Parenthesis missing in the expression");
 		
 		return exp;
 	}
@@ -128,19 +127,39 @@ public class Sigma {
 				vals.push(Double.parseDouble(sb.toString()));
 			}
 			//If it is (, push it onto the operations stack
-			else if(tokens[i] == '('){
+			else if(tokens[i] == '(' || tokens[i] == '~' || tokens[i] == '&' || tokens[i] == '@'){
 				ops.push(tokens[i]);
 			}
 			//If it is ), find the closest ( to solve
 			else if(tokens[i] == ')'){
 				while(ops.peek() != '('){
-					vals.push(operation(ops.pop() , vals.pop() , vals.pop())); //Do the operation, push the result to the value stack
+					if(!ops.isEmpty() && !vals.empty() && vals.size() > 1){
+						vals.push(operation(ops.pop() , vals.pop() , vals.pop())); //Do the operation, push the result to the value stack
+					}
+					//If it is a sin operator
+					if(ops.peek() == '~'){
+						double val = vals.pop();
+						vals.push(Math.sin(val));
+						break;
+					}
+					//If it is a cos operator
+					else if(ops.peek() == '&'){
+						double val = vals.pop();
+						vals.push(Math.cos(val));
+						break;
+					}
+					//If it is a tan operator
+					else if(ops.peek() == '@'){
+						double val = vals.pop();
+						vals.push(Math.tan(val));
+						break;
+					}
 				}
 				ops.pop();
 			}
 			//If it is the operator
 			else if(tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '^'){
-				while (!ops.empty() && hasPrecedence(tokens[i], ops.peek())){
+				while (!ops.empty() && ops.peek() != '~' && ops.peek() != '&' && ops.peek() != '@' && hasPrecedence(tokens[i], ops.peek())){
 					vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 				}
 				

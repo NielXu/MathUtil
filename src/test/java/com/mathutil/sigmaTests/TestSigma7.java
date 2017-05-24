@@ -7,17 +7,17 @@ import org.junit.Test;
 import com.mathutil.operations.Sigma;
 
 /**
- * Test case 2, test the priority
+ * Test case 7, cos function test
  * @author danielxu
  *
  */
-public class TestSigma2 {
+public class TestSigma7 {
 
 	@Test
 	public void test() {
-		double expect = (2.0+Math.pow(1.0, 1.0)) + (2.0+Math.pow(2.0, 2.0)) + (2.0+Math.pow(3.0, 3.0));
-		String exp = "2+x^x";
-		double test = Sigma.sum(1, 3, exp);
+		double expect = Math.cos(2.0*3.0) + Math.cos(3.0*3.0) + Math.cos(4.0*3.0);
+		String exp = "cos(x*3)";
+		double test = Sigma.sum(2, 4, exp);
 		
 		assertEquals(expect , test , 0);
 	}

@@ -7,17 +7,17 @@ import org.junit.Test;
 import com.mathutil.operations.Sigma;
 
 /**
- * Test case 2, test the priority
+ * Test case 8, tan function test
  * @author danielxu
  *
  */
-public class TestSigma2 {
+public class TestSigma8 {
 
 	@Test
 	public void test() {
-		double expect = (2.0+Math.pow(1.0, 1.0)) + (2.0+Math.pow(2.0, 2.0)) + (2.0+Math.pow(3.0, 3.0));
-		String exp = "2+x^x";
-		double test = Sigma.sum(1, 3, exp);
+		double expect = Math.tan(3*4) + Math.tan(4*4) + Math.tan(5*4);
+		String exp = "tan(x*4)";
+		double test = Sigma.sum(3, 5, exp);
 		
 		assertEquals(expect , test , 0);
 	}
