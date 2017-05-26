@@ -207,6 +207,22 @@ public class Matrix extends SimpleMatrix<Number> implements CalculableMatrix{
 		return new Matrix(result);
 	}
 	
+	/**
+	 * Get the String that contains all elements in the matrix
+	 * @return The string that contains all elements in the matrix
+	 */
+	@Override
+	public String toString(){
+		StringBuilder result = new StringBuilder();
+		for(int i=0;i<matrix.length;i++){
+			for(int j=0;j<matrix[0].length;j++){
+				result.append(matrix[i][j]+"     ");
+			}
+			result.append("\n");
+		}
+		return result.toString();
+	}
+	
 	//Check if the matrix is null, if the array is empty or if the array contain elements
 	private void matrixCheck(CalculableMatrix m){
 		if(m == null || m.getMatrix() == null || m.getRows() == 0 || m.getCols() == 0)
