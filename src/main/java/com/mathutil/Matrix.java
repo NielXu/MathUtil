@@ -180,6 +180,33 @@ public class Matrix extends SimpleMatrix<Number> implements CalculableMatrix{
 		return new Matrix(result);
 	}
 	
+	/**
+	 * Multiply the whole matrix by a factor. if the original matrix is A, the factor is k, the new matrix will be:<br>
+	 * <center>k*A</center><br>
+	 * Please notice that this method is different from <code>multiply(CalculableMatrix)</code>, k here means a factor but not a matrix
+	 * @param factor - The factor
+	 * @return The new matrix that contains the result
+	 */
+	public CalculableMatrix factor(Number factor) {
+		Number[][] result = new Number[getRows()][getCols()];
+		
+		for(int i=0;i<matrix.length;i++){
+			for(int j=0;j<matrix[0].length;j++){
+				if(uselong){
+					long fac = convertToLong(factor);
+					long origin = convertToLong(matrix[i][j]);
+					result[i][j] = origin*fac;
+				}
+				else{
+					double fac = convertToDouble(factor);
+					double origin = convertToDouble(matrix[i][j]);
+					result[i][j] = origin*fac;
+				}
+			}
+		}
+		return new Matrix(result);
+	}
+	
 	//Check if the matrix is null, if the array is empty or if the array contain elements
 	private void matrixCheck(CalculableMatrix m){
 		if(m == null || m.getMatrix() == null || m.getRows() == 0 || m.getCols() == 0)

@@ -8,7 +8,14 @@ package com.mathutil;
  * @see Matrix
  */
 public interface CalculableMatrix extends Matrixable<Number>{
-
+	
+	/**
+	 * Multiply a matrix by the factor
+	 * @param factor - The factor
+	 * @return The matrix that contains the result
+	 */
+	public CalculableMatrix factor(Number factor);
+	
 	/**
 	 * Do addition between two matrices
 	 * @param m - Another CalculableMatrix
