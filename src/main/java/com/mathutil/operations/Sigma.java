@@ -23,8 +23,7 @@ public class Sigma {
 	 * <center>a*(1+a)^2 </center> <br>
 	 * An example of the incorrect expression:<br>
 	 * <center> a(1+a)^2 </center> <br>
-	 * The expression can contain empty spaces since they will be removed during the calculation process. The variable can be any String except for 
-	 * special numbers: pi, e
+	 * The expression can contain empty spaces since they will be removed during the calculation process.
 	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
@@ -47,7 +46,7 @@ public class Sigma {
 	 * <center>a*(1+a)^2 </center> <br>
 	 * An example of the incorrect expression:<br>
 	 * <center> a(1+a)^2 </center> <br>
-	 * The expression can contain empty spaces since they will be removed during the calculation process.<br>
+	 * The expression can contain empty spaces since they will be removed during the calculation process.
 	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
