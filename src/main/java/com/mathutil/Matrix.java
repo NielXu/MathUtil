@@ -31,44 +31,6 @@ public class Matrix extends SimpleMatrix<Number> implements CalculableMatrix{
 		super();
 	}
 	
-	public static void main(String[] args){
-		SimpleMatrix<String> simple = new SimpleMatrix<String>(new String[][]{
-			{"1","2","3"}, //row 1
-			{"4","5","6"}  //row 2
-			});
-			simple.switchRow(0,1);
-			simple.switchCol(1,2);
-			
-		String[][] kk = simple.getMatrix();
-		for(int i=0;i<kk.length;i++){
-			for(int j=0;j<kk[0].length;j++){
-				System.out.print(kk[i][j]+"  ");
-			}
-			System.out.println();
-		}
-			
-		CalculableMatrix m = new Matrix(new Integer[][]{
-			{1,2,3},
-			{4,5,6},
-			{7,8,9}
-		});
-		Matrix m2 = new Matrix(new Integer[][]{
-			{1,2,3},
-			{4,5,6},
-			{7,8,9}
-		});
-		CalculableMatrix result =  m.multiply(m2);
-		
-		Number[][] re = result.getMatrix();
-		
-		for(int i=0;i<re.length;i++){
-			for(int j=0;j<re[0].length;j++){
-				System.out.print(re[i][j]+"   ");
-			}
-			System.out.println();
-		}
-	}
-	
 	/**
 	 * Create a new matrix that is calculable, it stores the elements in a two dimensional array. 
 	 * Please remember that the length of each row in the matrix should always be the same. 
