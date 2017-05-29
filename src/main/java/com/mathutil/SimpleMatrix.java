@@ -41,6 +41,7 @@ public class SimpleMatrix<T> implements Matrixable<T>{
 			throw new MatrixException("Matrix cannot be null or empty");
 		
 		checkRows(matrix);
+		//Deep clone the array
 		this.matrix = matrix;
 		this.rows = matrix.length;
 		this.cols = matrix[0].length;
@@ -84,11 +85,12 @@ public class SimpleMatrix<T> implements Matrixable<T>{
 	}
 
 	/**
-	 * Get the matrix, in form of a two dimensional array
+	 * Get the matrix, in form of a two dimensional array. <strong>Please do not modify the elements in the array, it will 
+	 * also affect the matrix!</strong>
 	 * @return The matrix, return null if there is no element in the matrix
 	 */
 	public T[][] getMatrix() {
-		return (T[][]) matrix;
+		return matrix;
 	}
 
 	/**
@@ -129,6 +131,26 @@ public class SimpleMatrix<T> implements Matrixable<T>{
 			matrix[i][col2] = temp;
 		}
 		
+	}
+	
+	/**
+	 * Get the String that contains all elements in the matrix, in form of a matrix.<br>
+	 * There is a tab (\t) between each element
+	 * @return The string that contains all elements in the matrix
+	 */
+	@Override
+	public String toString(){
+		if(matrix == null)
+			return "Empty";
+		
+		StringBuilder result = new StringBuilder();
+		for(int i=0;i<matrix.length;i++){
+			for(int j=0;j<matrix[0].length;j++){
+				result.append(matrix[i][j]+"\t");
+			}
+			result.append("\n");
+		}
+		return result.toString();
 	}
 	
 	//Check if rows are have the same length

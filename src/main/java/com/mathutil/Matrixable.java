@@ -44,7 +44,7 @@ public interface Matrixable<T> {
 	public void switchRow(int row1 , int row2);
 	
 	/**
-	 * Switch between teo columns
+	 * Switch between two columns
 	 * @param col1 - column index 1
 	 * @param col2 - column index 2
 	 */
