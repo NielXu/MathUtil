@@ -2,8 +2,8 @@ package com.mathutil.operations;
 
 import java.util.Stack;
 
-import com.mathutil.exceptions.BoundException;
-import com.mathutil.exceptions.ExpressionException;
+import com.mathutil.exceptions.SigmaBoundException;
+import com.mathutil.exceptions.SigmaExpressionException;
 
 /**
  * Calculating the sum using Sigma notation.
@@ -23,7 +23,9 @@ public class Sigma {
 	 * <center>a*(1+a)^2 </center> <br>
 	 * An example of the incorrect expression:<br>
 	 * <center> a(1+a)^2 </center> <br>
-	 * The expression can contain empty spaces since they will be removed during the calculation process.
+	 * The expression can contain empty spaces since they will be removed during the calculation process.<br>
+	 * Support operators: <i>+ - / * sin() cos() tan() abs()</i><br>
+	 * Support special values: <i>pi e</i>
 	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
@@ -46,7 +48,9 @@ public class Sigma {
 	 * <center>a*(1+a)^2 </center> <br>
 	 * An example of the incorrect expression:<br>
 	 * <center> a(1+a)^2 </center> <br>
-	 * The expression can contain empty spaces since they will be removed during the calculation process.
+	 * The expression can contain empty spaces since they will be removed during the calculation process.<br>
+	 *  Support operators: <i>+ - / * sin() cos() tan() abs()</i><br>
+	 * Support special values: <i>pi e</i>
 	 * 
 	 * @param low - The lower bound of the sigma notation, should not be greater than the higher bound
 	 * @param high - The upper bound of the sigma notation, should not be smaller than the lower bound
@@ -63,15 +67,17 @@ public class Sigma {
 	 * Check if the expression is valid or not
 	 */
 	private static String validate(int low , int high , String exp){
-		if (low > high) throw new BoundException("Lower bound cannot be greater than upper bound");
-		if(exp == null || exp.equals("")) throw new ExpressionException("Expression cannot be null or empty");
+		if (low > high) throw new SigmaBoundException("Lower bound cannot be greater than upper bound");
+		if(exp == null || exp.equals("")) throw new SigmaExpressionException("Expression cannot be null or empty");
+		if(!exp.contains("x")) throw new SigmaExpressionException("The variable of the expression should be x");
 		
-		if(!check(exp)) throw new ExpressionException("Parenthesis missing in the expression");
+		if(!check(exp)) throw new SigmaExpressionException("Parenthesis missing in the expression");
 		//Repalce whitespaces and some special notations
 		exp = exp.replace(" ", "");
 		exp = exp.replace("sin(", "~"); //Replace sin( to ~
 		exp = exp.replace("cos(", "&"); //Replace cos( to &
 		exp = exp.replace("tan(", "@"); //Repalce tan( to @
+		exp = exp.replace("abs(", "`"); //Replace abs( to `
 		exp = exp.replace("e", String.valueOf(Math.E)); //Replace 'e' to natural number e
 		exp = exp.replace("pi", String.valueOf(Math.PI));//Replace 'pi' to pi
 		//Check if the parenthesis is symmetry or not
@@ -125,7 +131,7 @@ public class Sigma {
 				vals.push(Double.parseDouble(sb.toString()));
 			}
 			//If it is (, push it onto the operations stack
-			else if(tokens[i] == '(' || tokens[i] == '~' || tokens[i] == '&' || tokens[i] == '@'){
+			else if(tokens[i] == '(' || tokens[i] == '~' || tokens[i] == '&' || tokens[i] == '@' || tokens[i] == '`'){
 				ops.push(tokens[i]);
 			}
 			//If it is ), find the closest ( to solve
@@ -152,12 +158,17 @@ public class Sigma {
 						vals.push(Math.tan(val));
 						break;
 					}
+					else if(ops.peek() == '`'){
+						double val = vals.pop();
+						vals.push(Math.abs(val));
+						break;
+					}
 				}
 				ops.pop();
 			}
 			//If it is the operator
 			else if(tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '^'){
-				while (!ops.empty() && ops.peek() != '~' && ops.peek() != '&' && ops.peek() != '@' && hasPrecedence(tokens[i], ops.peek())){
+				while (!ops.empty() && ops.peek() != '~' && ops.peek() != '&' && ops.peek() != '@'&& ops.peek() != '`' && hasPrecedence(tokens[i], ops.peek())){
 					vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 				}
 				

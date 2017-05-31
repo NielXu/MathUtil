@@ -1,11 +1,11 @@
 package com.mathutil.exceptions;
 
-public class ExpressionException extends RuntimeException{
+public class SigmaBoundException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	
-	public ExpressionException(String errMessage){
+	public SigmaBoundException(String errMessage){
 		super(errMessage);
 	}
-
+	
 }

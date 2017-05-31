@@ -241,7 +241,7 @@ public class Matrix implements Matrixable<Number>{
 	 * Multiply the whole matrix by a factor. if the original matrix is A, the factor is k, the new matrix will be:<br>
 	 * <center>k*A</center><br>
 	 * <center>k*A = A*k</center>
-	 * Please notice that this method is different from <code>multiply(CalculableMatrix)</code>, k here means a factor but not a matrix
+	 * Please notice that this method is different from <code>multiply(Matrix)</code>, k here means a factor but not a matrix
 	 * 
 	 * @param factor - The factor
 	 * @return The new matrix that contains the result
@@ -427,7 +427,7 @@ public class Matrix implements Matrixable<Number>{
         
         for(int i=0;i<x.length;i++){
         	for(int j=0;j<x[0].length;j++){
-        		x[i][j] = round(x[i][j] , 2);
+        		x[i][j] = MathUtil.round(x[i][j] , 2);
         	}
         }
         return x;
@@ -508,15 +508,6 @@ public class Matrix implements Matrixable<Number>{
     	return r;
     }
     
-    //Round the double value to the given places
-    private double round(double val , int places){
-    	long factor = (long) Math.pow(10, places);
-        val = val * factor;
-        long tmp = Math.round(val);
-        return (double) tmp / factor;
-    }
-
-    
 	//Check if the matrix is null, if the array is empty or if the array contain elements
 	private void matrixCheck(Matrix m){
 		if(m == null || m.getMatrix() == null || m.getRows() == 0 || m.getCols() == 0)
@@ -525,7 +516,7 @@ public class Matrix implements Matrixable<Number>{
 	
 	//Cast a number to double in order to do the calculation
 	private double convertToDouble(Number num){
-		return new Double(num.doubleValue());
+		return num.doubleValue();
 	}
 	
 	//Check if rows are have the same length

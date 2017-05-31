@@ -26,6 +26,16 @@ String exp = "sin(cos(tan(x)))";
 double result = Sigma.sum(1 , 10 , exp);
 ```
 
+An example about how to use round in MathUtil:
+```java
+double rounded = MathUtil.round(1.9999 , 2); //expect 2.0
+```
+
+An example about how to create a SuperVector:
+```java
+SuperVector v = new SuperVector(1 , 2 , 3); //A vector with xyz components
+```
+
 An example about how to use SimpleMatrix:
 ```java
 SimpleMatrix<String> simple = new SimpleMatrix<String>(new String[][]{
@@ -71,10 +81,12 @@ Please notice that there are few exceptions:
 # Updates
 
    1. Version 0.0.1, added Sigma function, allow user to calculate the sum using Sigma notation. Added test cases 1~4.  
-   2. Version 0.0.2, Sigma function is now support sin, cos and tan symbol. No custom variable name allowed, all variable name should be x. Added test case 5~9.  
+   2. Version 0.0.2, Sigma function now supports sin, cos and tan symbol. No custom variable name allowed anymore, all variable name should be x. Added test case 5~9.  
    3. Version 0.0.3, added interfaces Matrixable and CalculableMatrix, added classes Matrix and SimpleMatrix. See javadoc for more informations.  
    4. Version 0.0.4, removed CalculableMatrix interface, added factor(multiply the matrix by a numebr) method, power(raise the matrix to the power of n) method and det(determinant) method in Matrix class. Matrix class no longer extends SimpleMatrix class, but instead, it implements the Matrixable interface.  
+   5. Version 0.0.5, Sigma function now supports abs symbol. Added SuperVector class and MathUtil class. Added MathUtil tests, round method test 1~3, dist method test 1~2.  
 
 # Contribute
 
-To contribute, you can added new classes. Or, you can add some tests that you think they might be helpful.
+To contribute, you can added new classes. Or, you can add some tests that you think they might be helpful. To add test cases, create the cases under the corresponding package, and
+then add it to the AllTests test suite.

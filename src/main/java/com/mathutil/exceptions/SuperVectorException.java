@@ -1,10 +1,10 @@
 package com.mathutil.exceptions;
 
-public class BoundException extends RuntimeException{
+public class SuperVectorException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
-	
-	public BoundException(String errMessage){
+
+	public SuperVectorException(String errMessage){
 		super(errMessage);
 	}
 	
