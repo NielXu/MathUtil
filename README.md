@@ -80,11 +80,11 @@ Please notice that there are few exceptions:
 
 # Updates
 
-   1. Version 0.0.1, added Sigma function, allow user to calculate the sum using Sigma notation. Added test cases 1~4.  
-   2. Version 0.0.2, Sigma function now supports sin, cos and tan symbol. No custom variable name allowed anymore, all variable name should be x. Added test case 5~9.  
+   1. Version 0.0.1, added Sigma function, allow user to calculate the sum using Sigma notation. Added test cases 1-4.  
+   2. Version 0.0.2, Sigma function now supports sin, cos and tan symbol. No custom variable name allowed anymore, all variable name should be x. Added test case 5-9.  
    3. Version 0.0.3, added interfaces Matrixable and CalculableMatrix, added classes Matrix and SimpleMatrix. See javadoc for more informations.  
    4. Version 0.0.4, removed CalculableMatrix interface, added factor(multiply the matrix by a numebr) method, power(raise the matrix to the power of n) method and det(determinant) method in Matrix class. Matrix class no longer extends SimpleMatrix class, but instead, it implements the Matrixable interface.  
-   5. Version 0.0.5, Sigma function now supports abs symbol. Added SuperVector class and MathUtil class. Added MathUtil tests, round method test 1~3, dist method test 1~2.  
+   5. Version 0.0.5, Sigma function now supports abs symbol. Added SuperVector class and MathUtil class. Added MathUtil tests, round method test 1-3, dist method test 1-2.  
 
 # Contribute
 
