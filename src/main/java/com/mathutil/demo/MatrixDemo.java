@@ -1,5 +1,6 @@
 package com.mathutil.demo;
 
+import com.mathutil.ExactMatrix;
 import com.mathutil.Matrix;
 import com.mathutil.SimpleMatrix;
 
@@ -52,6 +53,28 @@ public class MatrixDemo {
 		m4.add(m5.power(-1)).multiply(m4);	//Combination, the same as (A + (B ^ -1)) * A
 		System.out.println(m4); 			//Display the matrix A
 		System.out.println(m5); 			//Display the matrix B
+		
+		
+		//ExactMatrix is basically the same as Matrix, but it uses BigDecimal for calculations.
+		//It has two method that Matrix does not have called setShowDecimal and setPrecision.
+		//Create a ExactMatrix(A), recommend using String
+		ExactMatrix em1 = new ExactMatrix(new String[][]{
+			{"1","6","2"},
+			{"1","8","1"},
+			{"1","10","0"},
+			{"1","14","2"},
+			{"1","18","0"}
+		});
+		//Create another ExactMatrix(B), recommend using String
+		ExactMatrix em2 = new ExactMatrix(new String[][]{
+			{"7"},
+			{"9"},
+			{"13"},
+			{"17.5"},
+			{"18"}
+		});
+		//β = (A^T * B)^-1 * A^T * B (β, in Multiple Linear Regression), and show 8 decimal places of the result
+		System.out.println(em1.transpose().multiply(em1).invert().multiply(em1.transpose()).multiply(em2).setShowDecimal(8));
 	}
 	
 }

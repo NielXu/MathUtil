@@ -8,11 +8,12 @@ import com.mathutil.exceptions.MatrixException;
  * But it does not support calculations. SimpleMatrix is immutable, which means, you cannot expand the matrix or remove the elements
  * in the matrix. However, you can switch rows and columns in the matrix, you can get the element from the matrix or you can replace the 
  * element in the specific location to a new one.<br>
- * If the purpose of the matrix is to do calculations, please use <code>Matrix</code> instead.
+ * If the purpose of the matrix is to do calculations, please use {@link Matrix} or {@link ExactMatrix}instead.
  * 
  * @author danielxu
  * @param <T> Any type of information is allowed.
  * @see Matrix
+ * @see ExactMatrix
  * @see Matrixable
  */
 public class SimpleMatrix<T> implements Matrixable<T>{

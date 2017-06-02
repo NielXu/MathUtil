@@ -54,10 +54,10 @@ public class MathUtil{
 		if(Double.isNaN(val))
 			return Double.NaN;
 		
-    	long factor = (long) Math.pow(10, places);
-        val = val * factor;
-        long tmp = Math.round(val);
-        return (double) tmp / factor;
+		long factor = (long) Math.pow(10, places);
+		val = val * factor;
+		long tmp = Math.round(val);
+		return (double) tmp / factor;
 	}
 	
 	/**

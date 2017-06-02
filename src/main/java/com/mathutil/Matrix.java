@@ -11,9 +11,11 @@ import com.mathutil.exceptions.MatrixException;
  * Matrix is immutable, which means, you cannot expand the matrix or remove the elements in the matrix. 
  * However, you can switch rows and columns in the matrix, you can get the element from the matrix or you can replace the 
  * element in the specific location to a new one.<br>
- * If the purpose of the matrix is to store informatoins only, please use <code>SimpleMatrix</code> instead.
+ * If the purpose of the matrix is to store informatoins only, please use <code>SimpleMatrix</code> instead.<br>
+ * If the calculations are long and complex, please consider using {@link ExactMatrix}
  *
  * @author danielxu
+ * @see ExactMatrix
  * @see SimpleMatrix
  * @see Matrixable
  */
@@ -41,6 +43,8 @@ public class Matrix implements Matrixable<Number>{
 	 * @see SimpleMatrix
 	 */
 	public Matrix(Number[][] matrix){
+		if(matrix == null)
+			throw new MatrixException("The matrix cannot be null");
 		checkRows(matrix);
 		this.matrix = new double[matrix.length][matrix[0].length];
 		
@@ -136,7 +140,7 @@ public class Matrix implements Matrixable<Number>{
 	 * Which means, <code>matrix1.addition(matrix2)</code> and <code>matrix2.addition(matrix1)</code> will get the same result.
 	 * 
 	 * @param m - Another matrix that have the same dimensions
-	 * @return A new CalculableMatrix that has the sum of the two matrices
+	 * @return A new Matrix that has the sum of the two matrices
 	 */
 	public Matrix add(Matrix m) {
 		matrixCheck(m);
@@ -167,7 +171,7 @@ public class Matrix implements Matrixable<Number>{
 	 * <strong>NOT</strong> get the same result.
 	 * 
 	 * @param m - Another matrix that have the same dimensions
-	 * @return A new CalculableMatrix that has the difference of the two matrices
+	 * @return A new Matrix that has the difference of the two matrices
 	 */
 	public Matrix substract(Matrix m) {
 		matrixCheck(m);
@@ -211,7 +215,7 @@ public class Matrix implements Matrixable<Number>{
 					+ "left side matrix's columns number equals to right side matrix's rows number");
 		
 		//Matrix1: m*n , Matrix2: p*q , M1*M2 = m*q
-		int row = getRows();
+		int row = rows;
 		int col = m.getCols();
 		
 		Number[][] result = new Number[row][col];
@@ -219,7 +223,7 @@ public class Matrix implements Matrixable<Number>{
 		//Initialize the number to 0
 		for(int i=0;i<result.length;i++){
 			for(int j=0;j<result[0].length;j++){
-				result[i][j] = 0;
+				result[i][j] = 0d;
 			}
 		}
 		
@@ -250,7 +254,7 @@ public class Matrix implements Matrixable<Number>{
 		if(factor == null)
 			throw new MatrixCalculationException("The factor cannot be null");
 		
-		Number[][] result = new Number[getRows()][getCols()];
+		Number[][] result = new Number[rows][cols];
 		
 		for(int i=0;i<matrix.length;i++){
 			for(int j=0;j<matrix[0].length;j++){
@@ -259,6 +263,22 @@ public class Matrix implements Matrixable<Number>{
 				result[i][j] = origin*fac;
 			}
 		}
+		return new Matrix(result);
+	}
+	
+	/**
+	 * Transpose the matrix, if the size of the original matrix is m*n, after transposed, the size will be n*m
+	 * @return The matrix after transposed.
+	 */
+	public Matrix transpose(){
+		Number[][] result = new Number[cols][rows];
+		
+		for(int i=0;i<matrix.length;i++){
+			for(int j=0;j<matrix[0].length;j++){
+				result[j][i] = matrix[i][j];
+			}
+		}
+		
 		return new Matrix(result);
 	}
 	
@@ -278,9 +298,9 @@ public class Matrix implements Matrixable<Number>{
 	 * If n < 0, return the inverse of the matrix to the power of n.
 	 */
 	public Matrix power(int n) {
-		Number[][] result = new Number[getRows()][getRows()];
 		//Identity matrix
 		if(n == 0){
+			Number[][] result = new Number[rows][cols];
 			int index = 0;
 			for(int i=0;i<result.length;i++){
 				for(int j=0;j<result[0].length;j++){
@@ -326,6 +346,16 @@ public class Matrix implements Matrixable<Number>{
 	}
 	
 	/**
+	 * Invert the matrix, it's the same as saying <code>power(-1)</code>. Please notice that not every matrix can be inverted, only square matrices that have 
+	 * the non-zero determinant can be inverted. Call <code>det()</code> can get the determinant of the matrix.
+	 * @return The inverted matrix
+	 * @see {@link #power(int)}
+	 */
+	public Matrix invert(){
+		return power(-1);
+	}
+	
+	/**
 	 * Find the determinant of the matrix. Please notice that only <strong>square matrices</strong> have determinant, it means only the 
 	 * matrices that have dimension n*n have determinant
 	 * @return The determinant of the matrix as a number
@@ -349,7 +379,7 @@ public class Matrix implements Matrixable<Number>{
 	
 	/**
 	 * Get the String that contains all elements in the matrix, in form of a matrix.<br>
-	 * There is a tab (\t) between each element
+	 * There is a tab (\t) between each element. There is an empty line(\n) at the end of the matrix
 	 * @return The string that contains all elements in the matrix
 	 */
 	@Override
@@ -435,8 +465,7 @@ public class Matrix implements Matrixable<Number>{
  
 	//Method to carry out the partial-pivoting Gaussian
 	//elimination.  Here index[] stores pivoting order.
-    private void gaussian(double a[][], int index[]) 
-    {
+    private void gaussian(double a[][], int index[]) {
         int n = index.length;
         double c[] = new double[n];
  
@@ -487,7 +516,7 @@ public class Matrix implements Matrixable<Number>{
     //Get a copy of the matrix
     //deep clone the two dimensional array, prevent from modifying the original values
     private double[][] deepClone(){
-    	double[][] r = new double[getRows()][getCols()];
+    	double[][] r = new double[rows][cols];
     	for(int i=0;i<r.length;i++){
     		for(int j=0;j<r[0].length;j++){
     			r[i][j] = matrix[i][j];
@@ -499,7 +528,7 @@ public class Matrix implements Matrixable<Number>{
     //Get a copy of the matrix
     //this method deep clone the two dimensional array and return Number type
     private Number[][] convertToNumber(double[][] matrix){
-    	Number[][] r = new Number[getRows()][getCols()];
+    	Number[][] r = new Number[rows][cols];
     	for(int i=0;i<r.length;i++){
     		for(int j=0;j<r[0].length;j++){
     			r[i][j] = matrix[i][j];

@@ -20,7 +20,7 @@ public class SuperVector{
 	private int dimensions;
 	
 	/**
-	 * Create an empty SuperVector
+	 * Create an empty SuperVector without any components
 	 */
 	public SuperVector(){
 		dimensions = 0;

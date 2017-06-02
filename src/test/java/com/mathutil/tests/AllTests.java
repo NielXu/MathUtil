@@ -4,21 +4,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.mathutil.mathutilTests.TestDist1;
-import com.mathutil.mathutilTests.TestDist2;
-import com.mathutil.mathutilTests.TestRound1;
-import com.mathutil.mathutilTests.TestRound2;
-import com.mathutil.mathutilTests.TestRound3;
-import com.mathutil.sigmaTests.TestSigma1;
-import com.mathutil.sigmaTests.TestSigma10;
-import com.mathutil.sigmaTests.TestSigma2;
-import com.mathutil.sigmaTests.TestSigma3;
-import com.mathutil.sigmaTests.TestSigma4;
-import com.mathutil.sigmaTests.TestSigma5;
-import com.mathutil.sigmaTests.TestSigma6;
-import com.mathutil.sigmaTests.TestSigma7;
-import com.mathutil.sigmaTests.TestSigma8;
-import com.mathutil.sigmaTests.TestSigma9;
+import com.mathutil.mathutilTests.*;
+import com.mathutil.sigmaTests.*;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
