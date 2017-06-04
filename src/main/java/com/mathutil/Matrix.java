@@ -135,6 +135,34 @@ public class Matrix implements Matrixable<Number>{
 	}
 	
 	/**
+	 * Multiply a row of the matrix by a given factor.
+	 * @param row - The row that will be multiplied
+	 * @param factor - The factor
+	 */
+	public void multiplyRow(int row , Number factor){
+		if(row > rows)
+			throw new MatrixCalculationException("Index out of bound "+row);
+		
+		for(int i=0;i<cols;i++){
+			matrix[row][i] *= factor.doubleValue();
+		}
+	}
+	
+	/**
+	 * Multiply a column of the matrix by a given factor.
+	 * @param col - The column that will be multiplied
+	 * @param factor - The factor
+	 */
+	public void multiplyCol(int col , Number factor){
+		if(col > cols)
+			throw new MatrixCalculationException("Index out of bound "+col);
+		
+		for(int i=0;i<rows;i++){
+			matrix[i][col] *= factor.doubleValue();
+		}
+	}
+	
+	/**
 	 * Do addition between two matrices, only matrices that have the same dimensions can do the operations. 
 	 * In matrix:<br><center> A+B = B+A </center><br>
 	 * Which means, <code>matrix1.addition(matrix2)</code> and <code>matrix2.addition(matrix1)</code> will get the same result.
@@ -330,7 +358,18 @@ public class Matrix implements Matrixable<Number>{
 		else{
 			if(getRows() != getCols())
 				throw new MatrixCalculationException("Only square matrix can be raised to the power of "+n);
-			//Invertible
+			//Only one element in the matrix
+			if(rows == 1 && cols == 1){
+				if(matrix[0][0] == 0)
+					throw new MatrixCalculationException("The determinant is 0, it is invertible");
+				
+				double r = 1 / matrix[0][0];
+				Number[][] result = new Number[][]{
+					{r}
+				};
+				return new Matrix(result);
+			}
+			//It's not Invertible
 			if(determinant(matrix) == 0)
 				throw new MatrixCalculationException("The determinant of the matrix is 0, it is invertible");
 			
@@ -368,6 +407,33 @@ public class Matrix implements Matrixable<Number>{
 	}
 	
 	/**
+	 * Get the Reduced Row Echelon Form(rref) of the matrix, any size of matrix can be transformed to the rref.
+	 * @return The rref of the current matrix
+	 */
+	public Matrix rref(){
+		return new Matrix(convertToNumber(calculateRREF()));
+	}
+	
+	/**
+	 * Get the rank of the matrix. The rank of a matrix A is the dimension of the vector space generated (or spanned) by its columns.
+	 * @return The rank of the matrix
+	 */
+	public int rank(){
+		double[][] m = calculateRREF();
+		int rank = 0 , zeros = 0;
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m[0].length;j++){
+				if(m[i][j] == 0)
+					zeros++;
+			}
+			if(zeros != cols)
+				rank++;
+			zeros = 0;
+		}
+		return rank;
+	}
+	
+	/**
 	 * Get the two dimensional array that represents the matrix, this method will return a copy of the 
 	 * array but not the real array, therefore, the return array can be modified and it will not affect the 
 	 * original array that stores in matrix.
@@ -395,6 +461,77 @@ public class Matrix implements Matrixable<Number>{
 			result.append("\n");
 		}
 		return result.toString();
+	}
+	
+	//Calculate the rref
+	private double[][] calculateRREF() {
+		double[][] m = deepClone();
+		int lead = 0;
+		int rowCount = m.length;
+		int colCount = m[0].length;
+		int i;
+		boolean quit = false;
+
+		for (int row = 0; row < rowCount && !quit; row++) {
+			if (colCount <= lead){
+				quit = true;
+				break;
+			}
+			i = row;
+
+			//System.out.println(m[i][lead] == 0);
+			while (!quit && m[i][lead] == 0){
+				//System.out.println("K");
+				i++;
+				if (rowCount == i){
+					i = row;
+					lead++;
+
+					if (colCount == lead){
+						quit = true;
+						break;
+					}
+				}
+			}
+
+			if (!quit){
+				rrefSwap(m, i, row);
+
+				if (m[row][lead] != 0)
+					rrefMulti(m, row, 1.0f / m[row][lead]);
+
+				for (i = 0; i < rowCount; i++){
+					if (i != row)
+						rrefSub(m, m[i][lead], row, i);
+				}
+			}
+		}
+		return m;
+	}
+	
+	//rref calculation swap two rows
+	private void rrefSwap(double[][] m, int row1, int row2) {
+		double[] swap = new double[m[0].length];
+
+		for (int c1 = 0; c1 < m[0].length; c1++)
+			swap[c1] = m[row1][c1];
+
+		for (int c1 = 0; c1 < m[0].length; c1++) {
+			m[row1][c1] = m[row2][c1];
+			m[row2][c1] = swap[c1];
+		}
+	}
+
+	//rref calculation, multiply row
+	private void rrefMulti(double[][] m, int row, double scalar) {
+		for (int c1 = 0; c1 < m[0].length; c1++)
+			m[row][c1] *= scalar;
+	}
+
+	//rref calculation, substraction
+	private void rrefSub(double[][] m, double scalar, int subtract_scalar_times_this_row, int from_this_row) {
+		for (int c1 = 0; c1 < m[0].length; c1++)
+			m[from_this_row][c1] -= scalar * m[subtract_scalar_times_this_row][c1];
 	}
 	
 	//Find the determinant recursively
@@ -436,7 +573,7 @@ public class Matrix implements Matrixable<Number>{
  
         //Transform the matrix into an upper triangle
         gaussian(a, index);
- 
+        
         //Update the matrix b[i][j] with the ratios stored
         for (int i=0; i<n-1; ++i)
             for (int j=i+1; j<n; ++j)

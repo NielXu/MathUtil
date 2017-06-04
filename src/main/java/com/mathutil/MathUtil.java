@@ -1,5 +1,8 @@
 package com.mathutil;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import com.mathutil.exceptions.CalculationException;
 
 /**
@@ -47,17 +50,15 @@ public class MathUtil{
 	public static double round(double val , int places){
 		if(places < 0)
 			throw new CalculationException("The decimal places cannot smaller than 0");
-		if(val == 0 || val ==  Double.NaN)
+		if(val == 0)
 			return 0;
 		if(places == 0)
 			return Math.round(val);
 		if(Double.isNaN(val))
 			return Double.NaN;
 		
-		long factor = (long) Math.pow(10, places);
-		val = val * factor;
-		long tmp = Math.round(val);
-		return (double) tmp / factor;
+		BigDecimal b = new BigDecimal(val).setScale(places, RoundingMode.HALF_UP);
+		return b.doubleValue();
 	}
 	
 	/**

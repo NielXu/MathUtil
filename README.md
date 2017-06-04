@@ -63,6 +63,7 @@ Matrix matrix2 = new Matrix(new Integer[][]{
 Matrix sum = matrix1.add(matrix2);               //do addition
 Matrix difference = matrix1.substract(matrix2);  //do subtraction
 Matrix product = matrix1.multiply(matrix2);      //do multiplication
+
 ```
 For more informations about Matrix, please check out the MatrixDemo.  
 
@@ -86,6 +87,7 @@ Please notice that there are few exceptions:
    4. Version 0.0.4, removed CalculableMatrix interface, added factor(multiply the matrix by a numebr) method, power(raise the matrix to the power of n) method and det(determinant) method in Matrix class. Matrix class no longer extends SimpleMatrix class, but instead, it implements the Matrixable interface.  
    5. Version 0.0.5, Sigma function now supports abs symbol. Added SuperVector class and MathUtil class. Added MathUtil tests, round method test 1-3, dist method test 1-2.  
    6. Version 0.0.6, due to the accuracy loss by using double data type in calculations, I added a ExactMatrix class. This class uses BigDecimal to do the calculations which has the highest accuracy, and it implements Matrixable as well. Normally, when doing some ordinary calcualtoins, ExactMatrix class is not necessary. But when accuracy it's matter, for example, when one wants the exact result after a long and complex calculation, ExactMatrix class is necessary. Added ExactMatrix demo under MatrixDemo class. See javadoc for more informations. Added invert method in Matrix, it's the same as saying power(-1).
+   7. Version 0.0.7, redo MathUtil.round() function. Added rref(Reduced Row Echelon Form), rank(The rank of the matrix), multiplyRow(Multiply a row by a given factor) and multiplyCol(Multiply a column by a given factor) in both Matrix and ExactMatrix.
 
 # Contribute
 

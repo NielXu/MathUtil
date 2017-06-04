@@ -51,9 +51,11 @@ public class MatrixDemo {
 		m4.det();							//Get the determinant of the matrix
 		m4.getMatrix()[0][0] = 99;			//Modify the array will not affect the value in the matrix
 		m4.add(m5.power(-1)).multiply(m4);	//Combination, the same as (A + (B ^ -1)) * A
-		System.out.println(m4); 			//Display the matrix A
+		m4.transpose();						//Transpose the matrix A
+		m4.rref();                          //Get the rref of the matrix A
+		m4.rank();                          //Find the rank of the matrix A
+		System.out.println(); 			//Display the matrix A
 		System.out.println(m5); 			//Display the matrix B
-		
 		
 		//ExactMatrix is basically the same as Matrix, but it uses BigDecimal for calculations.
 		//It has two method that Matrix does not have called setShowDecimal and setPrecision.
@@ -73,7 +75,8 @@ public class MatrixDemo {
 			{"17.5"},
 			{"18"}
 		});
-		//β = (A^T * B)^-1 * A^T * B (β, in Multiple Linear Regression), and show 8 decimal places of the result
+		
+		//β = (A^T * A)^-1 * A^T * B (β, in Multiple Linear Regression), and show 8 decimal places of the result
 		System.out.println(em1.transpose().multiply(em1).invert().multiply(em1.transpose()).multiply(em2).setShowDecimal(8));
 	}
 	

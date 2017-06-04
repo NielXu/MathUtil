@@ -45,47 +45,91 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	
 	/**
 	 * Create a new matrix, using two dimensional BigDecimal array to represent the numbers. Another recommendatory 
-	 * constructor is {@link #ExactMatrix(String[][])}, for higher acurracy.
+	 * constructor is {@link #ExactMatrix(String[][])}, for higher acurracy. This constructor set the default precision 
+	 * to 12, call {@link ExactMatrix#ExactMatrix(BigDecimal[][], int)} to set the precision manually.
 	 * @param matrix - The two dimensional BigDecimal array represents the matrix
 	 */
 	public ExactMatrix(BigDecimal[][] matrix){
+		this(matrix , 12);
+	}
+	
+	/**
+	 * Create a new matrix, using two dimensional BigDecimal array to represent the numbers. Another recommendatory 
+	 * constructor is {@link #ExactMatrix(String[][])}, for higher acurracy.
+	 * @param matrix - The two dimensional BigDecimal array represents the matrix
+	 * @param precision - The precision of the calculation, the minimum is 8 and the maximum is 25, the default is 12. If the precision given is out 
+	 * 					  of the range, it will be set to the default which is 12
+	 */
+	public ExactMatrix(BigDecimal[][] matrix , int precision){
 		if(matrix == null)
 			throw new MatrixException("The matrix cannot be null");
 		checkRows(matrix);
 		
 		this.matrix = new BigDecimal[matrix.length][matrix[0].length];
+		if(precision < 8)
+			precision = 12;
+		if(precision > 25)
+			precision = 12;
+		this.precision = precision;
+		
 		for(int i=0;i<matrix.length;i++){
 			for(int j=0;j<matrix[0].length;j++){
-				this.matrix[i][j] = matrix[i][j];
+				this.matrix[i][j] = matrix[i][j].setScale(precision, RoundingMode.HALF_UP);
 			}
 		}
 		rows = matrix.length;
 		cols = matrix[0].length;
 		string_decimal_places = 3;
-		precision = 12;
 	}
 	
 	/**
 	 * Create a new matrix, using two dimensional String array to represent the numbers. The numbers will be exactly the 
-	 * same as the Strings represent, no extra decimal places. This constructor is more preferable compare with 
-	 * {@link #ExactMatrix(Number[][])}
+	 * same as the Strings represent. This constructor is more preferable compare with {@link #ExactMatrix(Number[][])}. 
+	 * This constructor set the default precision is 12, call {@link #ExactMatrix(String[][], int)} to set the precision manually.
 	 * @param matrix - The two dimensional String array represents the matrix
 	 */
 	public ExactMatrix(String[][] matrix){
+		this(matrix , 12);
+	}
+	
+	/**
+	 * Create a new matrix, using two dimensional String array to represent the numbers. The numbers will be exactly the 
+	 * same as the Strings represent. This constructor is more preferable compare with {@link #ExactMatrix(Number[][])}
+	 * @param matrix - The two dimensional String array represents the matrix
+	 * @param precision - The precision of the calculation, the minimum is 8 and the maximum is 25, the default is 12. If the precision given is out 
+	 * 					  of the range, it will be set to the default which is 12
+	 */
+	public ExactMatrix(String[][] matrix , int precision){
 		if(matrix == null)
 			throw new MatrixException("The matrix cannot be null");
 		checkRows(matrix);
 		
 		this.matrix = new BigDecimal[matrix.length][matrix[0].length];
+		if(precision < 8)
+			precision = 12;
+		if(precision > 25)
+			precision = 12;
+		this.precision = precision;
+		
 		for(int i=0;i<matrix.length;i++){
 			for(int j=0;j<matrix[0].length;j++){
-				this.matrix[i][j] = new BigDecimal(matrix[i][j]);
+				this.matrix[i][j] = new BigDecimal(matrix[i][j]).setScale(precision, RoundingMode.HALF_UP);
 			}
 		}
 		rows = matrix.length;
 		cols = matrix[0].length;
 		string_decimal_places = 3;
-		precision = 12;
+	}
+	
+	/**
+	 * Create a new matrix, using two dimensional Number array to represent the numbers. The numbers might be different and 
+	 * lead to accuracy loss. Some extra decimal places will be added at the end of each number, therefore, the numbers might not 
+	 * be exactly the same. The more preferable way is to use constructor {@link #ExactMatrix(String[][])} or {@link #ExactMatrix(BigDecimal[][])}. 
+	 * This constructor set the default precision to 12, call {@link ExactMatrix#ExactMatrix(Number[][], int)} to set it manually.
+	 * @param matrix - The two dimensional Number array represents the matrix
+	 */
+	public ExactMatrix(Number[][] matrix){
+		this(matrix , 12);
 	}
 	
 	/**
@@ -93,29 +137,34 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * lead to accuracy loss. Some extra decimal places will be added at the end of each number, therefore, the numbers might not 
 	 * be exactly the same. The more preferable way is to use constructor {@link #ExactMatrix(String[][])} or {@link #ExactMatrix(BigDecimal[][])}
 	 * @param matrix - The two dimensional Number array represents the matrix
+	 * @param precision - The precision of the calculation, the minimum is 8 and the maximum is 25, the default is 12. If the precision given is out 
+	 * 					  of the range, it will be set to the default which is 12
 	 */
-	public ExactMatrix(Number[][] matrix){
+	public ExactMatrix(Number[][] matrix , int precision){
 		if(matrix == null)
 			throw new MatrixException("The matrix cannot be null");
 		checkRows(matrix);
 		
 		this.matrix = new BigDecimal[matrix.length][matrix[0].length];
+		if(precision < 8)
+			precision = 12;
+		if(precision > 25)
+			precision = 12;
+		this.precision = precision;
+		
 		for(int i=0;i<matrix.length;i++){
 			for(int j=0;j<matrix[0].length;j++){
-				this.matrix[i][j] = new BigDecimal(matrix[i][j].doubleValue());
+				this.matrix[i][j] = new BigDecimal(matrix[i][j].doubleValue()).setScale(precision, RoundingMode.HALF_UP);
 			}
 		}
 		rows = matrix.length;
 		cols = matrix[0].length;
 		string_decimal_places = 3;
-		precision = 12;
 	}
 	
 	/**
 	 * Set how many decimal places will be shown in <code>toString()</code> method. The decimal places will be rounded, for example, 49.9 will be rounded to 50, 
 	 * 49.4 will be rounded to 49<br>
-	 * Please notice that this method will not change the numbers, it's all about display. To modify the precision in calculations, 
-	 * please check out {@link #setPrecision(int)}
 	 * @param places - How many decimal places will be displayed
 	 * <ul>
 	 * <li>If places set to be 0, only the integer part will be displayed</li>
@@ -126,23 +175,6 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 */
 	public ExactMatrix setShowDecimal(int places){
 		this.string_decimal_places = places;
-		return this;
-	}
-	
-	/**
-	 * Set the precision in calculations. The higher the precision is, the higher the accuracy will have. The default precision is 12, the minimum precision 
-	 * is 8 and the maximum precision is 30. If the precision given is out of the range, it will be reset to the default precision. The recommended precision is 
-	 * the default precision, if the precision is too large, it might use too much memory. If it's too small, the result might not be precise enough.
-	 * @param precision - The integer that represents the precision in calculations
-	 * @return The ExactMatrix itself, for next operation
-	 */
-	public ExactMatrix setPrecision(int precision){
-		if(precision > 30)	//Set to 30 at Max
-			precision = 12;
-		else if(precision < 5) //Set to 5 at min
-			precision = 12;
-		else
-			this.precision = precision; //Set to the given precision
 		return this;
 	}
 	
@@ -191,7 +223,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	public void switchRow(int row1, int row2) {
 		if(row1 < 0 || row2 < 0)
 			throw new MatrixException("The index row cannot smaller than 0");
-		if(row1 >= cols || row2 >= cols)
+		if(row1 >= rows || row2 >= rows)
 			throw new MatrixException("Index out of bound");
 		if(row1 == row2)
 			return;
@@ -219,6 +251,53 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 			BigDecimal temp = matrix[i][col1];
 			matrix[i][col1] = matrix[i][col2];
 			matrix[i][col2] = temp;
+		}
+	}
+	
+	/**
+	 * Multiply a row of the matrix by a given factor.
+	 * @param row - The row that will be multiplied
+	 * @param factor - The factor, as String
+	 */
+	public void multiplyRow(int row , String factor){
+		multiplyRow(row , new BigDecimal(factor));
+	}
+	
+	/**
+	 * Multiply a row of the matrix by a given factor.
+	 * @param row - The row that will be multiplied
+	 * @param factor - The factor
+	 */
+	public void multiplyRow(int row , BigDecimal factor){
+		if(row >= rows)
+			throw new MatrixCalculationException("Index out of bound "+row);
+		
+		
+		for(int i=0;i<matrix[0].length;i++){
+			matrix[row][i] = matrix[row][i].multiply(factor);
+		}
+	}
+	
+	/**
+	 * Multiply a column of the matrix by a given factor.
+	 * @param col - The column that will be multiplied
+	 * @param factor - The factor, as String
+	 */
+	public void multiplyCol(int col , String factor){
+		multiplyCol(col , new BigDecimal(factor));
+	}
+	
+	/**
+	 * Multiply a column of the matrix by a given factor.
+	 * @param col - The column that will be multiplied
+	 * @param factor - The factor
+	 */
+	public void multiplyCol(int col , BigDecimal factor){
+		if(col >= cols)
+			throw new MatrixCalculationException("Index out of bound "+col);
+		
+		for(int i=0;i<matrix.length;i++){
+			matrix[i][col] = matrix[i][col].multiply(factor);
 		}
 	}
 	
@@ -324,7 +403,8 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	}
 	
 	/**
-	 * Raise the matrix to the power of n. The result will be rounded to two decimal places in order to eliminate the accuracy loss<br>
+	 * Raise the matrix to the power of n. Please notice that if the matrix size is 1*1, it's the same as saying that A^-1 = 1/A0, A0 is the 
+	 * only element in the matrix<br>
 	 * <ul>
 	 * <li>If n = 0, get the identity matrix. There's a property, if I is the identity matrix of matrix A then: <br><center>A*I = I*A = A</center></li>
 	 * <li>If n > 0, it's the same as mutiply the matrix for n times</li>
@@ -371,9 +451,18 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 		else{
 			if(getRows() != getCols())
 				throw new MatrixCalculationException("Only square matrix can be raised to the power of "+n);
-			//Invertible
+			//Only one element in the matrix
+			if(rows == 1 && cols == 1){
+				if(matrix[0][0].compareTo(BigDecimal.ZERO) == 0)
+					throw new MatrixCalculationException("The determinant is 0, it is invertible");
+				
+				BigDecimal result[][] = new BigDecimal[1][1]; 
+				result[0][0] = BigDecimal.ONE.divide(matrix[0][0] , precision , RoundingMode.HALF_UP);
+				return new ExactMatrix(result);
+			}
+			//It's not Invertible
 			if(determinant(matrix).compareTo(BigDecimal.ZERO) == 0)
-				throw new MatrixCalculationException("The determinant of the matrix is 0, it is invertible");
+				throw new MatrixCalculationException("The determinant of the matrix is 0, it is not invertible");
 			
 			if(n == -1){
 				BigDecimal[][] r = invert(deepClone()); //invert the matrix
@@ -437,8 +526,41 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 		return determinant(matrix);
 	}
 	
+	/**
+	 * Invert the matrix, it's the same as saying <code>power(-1)</code>. Please notice that not every matrix can be inverted, only square matrices that have 
+	 * the non-zero determinant can be inverted. Call <code>det()</code> can get the determinant of the matrix.
+	 * @return The inverted matrix
+	 * @see {@link #power(int)}
+	 */
 	public ExactMatrix invert(){
-		return new ExactMatrix(invert(matrix));
+		return power(-1);
+	}
+	
+	/**
+	 * Get the Reduced Row Echelon Form(rref) of the matrix, any size of matrix can be transformed to the rref.
+	 * @return The rref of the current matrix
+	 */
+	public ExactMatrix rref(){
+		return new ExactMatrix(calculateRREF());
+	}
+	
+	/**
+	 * Get the rank of the matrix
+	 * @return The rank of the matrix
+	 */
+	public int rank(){
+		BigDecimal[][] m = calculateRREF();
+		int rank = 0 , zeros = 0;
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m[0].length;j++){
+				if(m[i][j].setScale(8, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) == 0)
+					zeros++;
+			}
+			if(zeros != cols)
+				rank++;
+			zeros = 0;
+		}
+		return rank;
 	}
 
 	/**
@@ -471,6 +593,73 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 			result.append("\n");
 		}
 		return result.toString();
+	}
+	
+	//Calculate the rref of the matrix
+	private BigDecimal[][] calculateRREF() {
+		BigDecimal[][] matrix = deepClone();
+		int lead = 0;
+		int rowCount = matrix.length;
+		int colCount = matrix[0].length;
+		int i;
+		boolean quit = false;
+
+		for (int row = 0; row < rowCount && !quit; row++){
+			if (colCount <= lead){
+				quit = true;
+				break;
+			}
+			i = row;
+			while (!quit && matrix[i][lead].setScale(8, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) == 0){
+				i++;
+				if (rowCount == i){
+					i = row;
+					lead++;
+
+					if (colCount == lead){
+						quit = true;
+						break;
+					}
+				}
+			}
+			if (!quit){
+				rrefSwap(matrix , i, row);
+				if (matrix[row][lead].compareTo(BigDecimal.ZERO) != 0)
+					rrefMulti(matrix , row, BigDecimal.ONE.divide(matrix[row][lead] , precision , RoundingMode.HALF_UP));
+
+				for (i = 0; i < rowCount; i++){
+					if (i != row)
+						rrefSub(matrix ,matrix[i][lead], row, i);
+				}
+			}
+		}
+		return matrix;
+	}
+	
+	//For rref calculation, multiply a row
+	private void rrefMulti(BigDecimal[][] matrix , int row , BigDecimal factor){
+		for(int i=0;i<matrix[0].length;i++){
+			matrix[row][i] = matrix[row][i].multiply(factor);
+		}
+	}
+	
+	//For rref calaulation, swaps two rows
+	private void rrefSwap(BigDecimal[][] matrix , int row1, int row2) {
+		BigDecimal[] swap = new BigDecimal[matrix[0].length];
+
+		for (int c1 = 0; c1 < matrix[0].length; c1++)
+			swap[c1] = matrix[row1][c1];
+
+		for (int c1 = 0; c1 < matrix[0].length; c1++) {
+			matrix[row1][c1] = matrix[row2][c1];
+			matrix[row2][c1] = swap[c1];
+		}
+	}
+	
+	//For rref calculation, subtraction
+	private void rrefSub(BigDecimal[][] matrix , BigDecimal scalar, int r1, int r2) {
+		for (int c1 = 0; c1 < matrix[0].length; c1++)
+			matrix[r2][c1] = matrix[r2][c1].subtract(matrix[r1][c1].multiply(scalar));
 	}
 	
 	//Find the determinant recursively
@@ -520,7 +709,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
  
         //Transform the matrix into an upper triangle
         gaussian(a, index);
- 
+        
         //Update the matrix b[i][j] with the ratios stored
         for (int i=0; i<n-1; ++i){
             for (int j=i+1; j<n; ++j){
@@ -546,6 +735,8 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
         }
         return x;
     }
+	
+	
 	
 	//Method to carry out the partial-pivoting Gaussian
 	//elimination.  Here index[] stores pivoting order.
@@ -596,7 +787,9 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
             }
         }
     }
-	
+    
+    
+    
 	//Check if the matrix is null, if the array is empty or if the array contain elements
 	private void matrixCheck(ExactMatrix m){
 		if(m == null || m.getMatrix() == null || m.getRows() == 0 || m.getCols() == 0)
@@ -627,7 +820,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 		BigDecimal[][] clone = new BigDecimal[getRows()][getCols()];
 		for(int i=0;i<clone.length;i++){
 			for(int j=0;j<clone[0].length;j++){
-				clone[i][j] = new BigDecimal(matrix[i][j].doubleValue());
+				clone[i][j] = matrix[i][j];
 			}
 		}
 		return clone;
