@@ -1,7 +1,11 @@
 package com.mathutil;
 
+import java.math.BigDecimal;
+import java.util.Random;
+
 import com.mathutil.exceptions.MatrixCalculationException;
 import com.mathutil.exceptions.MatrixException;
+import com.mathutil.linearalgebra.SuperVector;
 
 /**
  * Matrix is the class that can be used to do calcultions such as <code>substract(Matrix m)</code> 
@@ -27,12 +31,70 @@ public class Matrix implements Matrixable<Number>{
 	/**The number of rows and columns**/
 	private int rows , cols;
 	
+	/**Save the rank**/
+	private int rank = -1001;
+	
 	/**
 	 * Create an empty matrix that has no elements in it
 	 */
 	public Matrix(){
 		rows = 0;
 		cols = 0;
+	}
+	
+	/**
+	 * Convert vectors to a matrix, they must have the same dimension in order to be converted. The vectors can be converted as row or column in the matrix.
+	 * @param asRow - The vectors as row or not, true to be row, false to be column.
+	 * @param vectors - The vectors
+	 * @see #Matrix(SuperVector...)
+	 */
+	public Matrix(boolean asRow , SuperVector...vectors){
+		if(vectors == null || vectors[0] == null)
+			throw new MatrixException("The vectors cannot be null");
+		
+		int dimension = vectors[0].getDimension();
+		//Check dimensions
+		for(int i=0;i<vectors.length;i++){
+			if(dimension != vectors[i].getDimension())
+				throw new MatrixException("The vectors must have the same dimension in order to be converted to a matrix");
+		}
+		
+		//Vectors as row
+		if(asRow){
+			matrix = new double[vectors.length][dimension];
+			
+			for(int i=0;i<vectors.length;i++){
+				if(vectors[i] == null)
+					throw new MatrixException("The vectors cannot be null");
+				
+				for(int j=0;j<dimension;j++){
+					matrix[i][j] = vectors[i].getComponents()[j];
+				}
+			}
+		}
+		//Vectors as columns
+		else{
+			matrix = new double[dimension][vectors.length];
+			for(int i=0;i<dimension;i++){
+				for(int j=0;j<vectors.length;j++){
+					if(vectors[j] == null)
+						throw new MatrixException("The vectors cannot be null");
+					matrix[i][j] = vectors[j].getComponents()[i];
+				}
+			}
+		}
+		
+		rows = matrix.length;
+		cols = matrix[0].length;
+	}
+	
+	/**
+	 * Convert vectors to a matrix, they must have the same dimension in order to be converted. The vectors are as row in the matrix.
+	 * @param vectors - The vectors
+	 * @see #Matrix(boolean, SuperVector...)
+	 */
+	public Matrix(SuperVector...vectors){
+		this(true , vectors);
 	}
 	
 	/**
@@ -55,6 +117,32 @@ public class Matrix implements Matrixable<Number>{
 		for(int i=0;i<matrix.length;i++)
 			for(int j=0;j<matrix[0].length;j++)
 				this.matrix[i][j] = convertToDouble(matrix[i][j]);
+	}
+	
+	/**
+	 * Generate a new random matrix. All the elements in the matrix are random numbers 
+	 * within the given range.
+	 * @param row - The row of the matrix
+	 * @param col - The column of the matrix
+	 * @param min - The lower bound of the random number, inclusive
+	 * @param max - The upper bound of the random number, inclusive
+	 * @param integer - If the numbers should be integer or double, true to be integer, false to be double
+	 * @return The new random matrix
+	 */
+	public static Matrix randomMatrix(int row , int col , double min , double max , boolean integer){
+		if(row <= 0 || col <= 0)
+			throw new MatrixException("Illegal dimension of the matrix "+row+" * "+col);
+		
+		Number[][] m = new Number[row][col];
+		Random r = new Random();
+		
+		for(int i=0;i<row;i++){
+			for(int j=0;j<col;j++){
+				if(integer) m[i][j] = min + r.nextInt((int)max - (int)min + 1);
+				else m[i][j] = min + (max - min) * r.nextDouble();
+			}
+		}
+		return new Matrix(m);
 	}
 	
 	/**
@@ -160,6 +248,65 @@ public class Matrix implements Matrixable<Number>{
 		for(int i=0;i<rows;i++){
 			matrix[i][col] *= factor.doubleValue();
 		}
+	}
+	
+	/**
+	 * Get the subMatrix of this matrix.
+	 * @param start_row - (Inclusive)The starting row for the subMatrix, it means where the subMatrix row starts from in the original matrix
+	 * @param end_row - (Inclusive)The ending row for the subMatrix, it means where the subMatrix row ends at in the original matrix
+	 * @param start_col - (Inclusive)The starting column for the subMatrix, it means where the subMatrix column starts from in the original matrix
+	 * @param end_col - (Inclusive)The ending column for the subMatrix, it means where the subMatrix column ends at in the original matrix
+	 * @return The subMatrix with size: (end_row - start_row + 1) * (end_col - start_col + 1)
+	 */
+	public Matrix subMatrix(int start_row, int end_row, int start_col, int end_col) {
+		//Swicth the bounds if the lower bound is greater than the upper bound
+		if(start_row > end_row){
+			int temp = start_row;
+			start_row = end_row;
+			end_row = temp;
+		}
+		if(start_col > end_col){
+			int temp = start_col;
+			start_col = end_col;
+			end_col = temp;
+		}
+		//Out of bound
+		if(start_row < 0 || start_row >= rows || end_col < 0 || end_col >= cols)
+			throw new MatrixException("Index out of bound");
+		
+		int indexI = 0 ,indexJ = 0;
+		Number[][] b = new Number[(end_row - start_row)+1][(end_col - start_col)+1];
+		for(int i=start_row;i<=end_row;i++){
+			for(int j=start_col;j<=end_col;j++){
+				b[indexI][indexJ] = matrix[i][j];
+				indexJ++;
+			}
+			indexI++;
+			indexJ = 0;
+		}
+		return new Matrix(b);
+	}
+	
+	/**
+	 * Get if the matrix is empty.
+	 * @return True if it is empty, false otherwise
+	 */
+	public boolean isEmpty(){
+		return matrix == null;
+	}
+	
+	/**
+	 * Convert this <code>Matrix</code> to a <code>ExactMatrix</code>, please notice that there might be accuracy loss during the convert process.
+	 * @return The ExactMatrix
+	 */
+	public ExactMatrix toExactMatrix(){
+		BigDecimal[][] b = new BigDecimal[rows][cols];
+		for(int i=0;i<rows;i++){
+			for(int j=0;j<cols;j++){
+				b[i][j] = new BigDecimal(matrix[i][j]);
+			}
+		}
+		return new ExactMatrix(b);
 	}
 	
 	/**
@@ -419,18 +566,29 @@ public class Matrix implements Matrixable<Number>{
 	 * @return The rank of the matrix
 	 */
 	public int rank(){
-		double[][] m = calculateRREF();
-		int rank = 0 , zeros = 0;
-		for(int i=0;i<m.length;i++){
-			for(int j=0;j<m[0].length;j++){
-				if(m[i][j] == 0)
-					zeros++;
+		if(rank == -1001){
+			double[][] m = calculateRREF();
+			int rank = 0 , zeros = 0;
+			for(int i=0;i<m.length;i++){
+				for(int j=0;j<m[0].length;j++){
+					if(m[i][j] == 0)
+						zeros++;
+				}
+				if(zeros != cols)
+					rank++;
+				zeros = 0;
 			}
-			if(zeros != cols)
-				rank++;
-			zeros = 0;
+			this.rank = rank;
 		}
 		return rank;
+	}
+	
+	/**
+	 * Check if the matrix is full rank. Full rank means the rank of the matrix is equal to the numebr of rows of the matrix
+	 * @return True if it is full rank, false otherwise
+	 */
+	public boolean fullRank(){
+		return rank() == rows;
 	}
 	
 	/**
@@ -472,6 +630,15 @@ public class Matrix implements Matrixable<Number>{
 		int i;
 		boolean quit = false;
 
+		//Only on column or one element
+		if(m[0].length == 1){
+			m[0][0] = 1;
+			for(int k=1;k<m.length;k++){
+				m[k][0] = 0;
+			}
+			return m;
+		}
+		
 		for (int row = 0; row < rowCount && !quit; row++) {
 			if (colCount <= lead){
 				quit = true;
@@ -479,9 +646,7 @@ public class Matrix implements Matrixable<Number>{
 			}
 			i = row;
 
-			//System.out.println(m[i][lead] == 0);
 			while (!quit && m[i][lead] == 0){
-				//System.out.println("K");
 				i++;
 				if (rowCount == i){
 					i = row;

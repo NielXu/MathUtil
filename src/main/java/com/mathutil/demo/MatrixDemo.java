@@ -3,6 +3,8 @@ package com.mathutil.demo;
 import com.mathutil.ExactMatrix;
 import com.mathutil.Matrix;
 import com.mathutil.SimpleMatrix;
+import com.mathutil.linearalgebra.Linear;
+import com.mathutil.linearalgebra.Solution;
 
 public class MatrixDemo {
 
@@ -54,7 +56,7 @@ public class MatrixDemo {
 		m4.transpose();						//Transpose the matrix A
 		m4.rref();                          //Get the rref of the matrix A
 		m4.rank();                          //Find the rank of the matrix A
-		System.out.println(); 			//Display the matrix A
+		System.out.println(); 			    //Display the matrix A
 		System.out.println(m5); 			//Display the matrix B
 		
 		//ExactMatrix is basically the same as Matrix, but it uses BigDecimal for calculations.
@@ -75,9 +77,33 @@ public class MatrixDemo {
 			{"17.5"},
 			{"18"}
 		});
-		
 		//β = (A^T * A)^-1 * A^T * B (β, in Multiple Linear Regression), and show 8 decimal places of the result
 		System.out.println(em1.transpose().multiply(em1).invert().multiply(em1.transpose()).multiply(em2).setShowDecimal(8));
+		
+		Matrix.randomMatrix(4, 4, 1, 100, true);       //Create a new 4*4 random matrix, all the numbers are between 1 to 100, are all integers
+		ExactMatrix.randomMatrix(4, 4, 1, 100, true);  //The same as above
+		
+		//3 * 3
+		ExactMatrix k1 = new ExactMatrix(new String[][]{
+			{"2" , "3" , "1"},
+			{"0" , "4" , "2"},
+			{"1" , "5" , "2"},
+		});
+		//1 * 3
+		ExactMatrix k2 = new ExactMatrix(new String[][]{
+			{"2"},
+			{"3"},
+			{"0"},
+		});
+		Linear.printEqs(k1, k2, "x", "y", "z");                //Print out the equations
+		Solution s = Linear.solve(k1, k2, "x" , "y" , "z");    //Solve the linear system, get the solution
+		System.out.println(s.getSolutionCase());               //Print out the Solution case
+		System.out.println(s);                                 //Print out the solutions
+		//From row 0 to row 1, from column 1 to column 2 (index start with 0)
+		System.out.println(k1.subMatrix(0, 1, 1, 2));          //Get the subMatrix from the matrix and display it
+		
+		k1.toMatrix();             //Convert a ExactMatrix to a Matrix
+		m4.toExactMatrix();        //Convert a Matrix to a ExactMatrix
 	}
 	
 }

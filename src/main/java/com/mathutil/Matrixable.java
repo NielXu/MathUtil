@@ -55,4 +55,5 @@ public interface Matrixable<T> {
 	 * @return The two dimensional array
 	 */
 	public T[][] getMatrix();
+	
 }

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.mathutil.MathUtil;
-import com.mathutil.SuperVector;
+import com.mathutil.linearalgebra.SuperVector;
 
 /**
  * Test case 1, basic test
