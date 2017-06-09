@@ -8,7 +8,7 @@ import com.mathutil.ExactMatrix;
 import com.mathutil.Matrix;
 
 /**
- * The solution, contains the {@link SolutionCase} and the results. Please notice that not every system can be solved, 
+ * A solution, contains the {@link SolutionCase} and the results. Please notice that not every system can be solved, 
  * it might also be infinite solutions or no solutions.
  * 
  * @author danielxu
@@ -147,7 +147,7 @@ public class Solution {
 	 * @see #EXACT_INFINITE
 	 * @see #EXACT_UNSOLVABLE
 	 */
-	public BigDecimal getExactResult(String var){
+	public BigDecimal getExactSolution(String var){
 		if(cas == SolutionCase.INFINITE)
 			return EXACT_INFINITE;
 		if(cas == SolutionCase.UNSOLVABLE)

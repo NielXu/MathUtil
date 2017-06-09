@@ -28,4 +28,11 @@ public interface Vector<T> {
 	 */
 	public int getDimension();
 	
+	/**
+	 * Get a component of the vector by the index
+	 * @param index - The index of the component, start from 0
+	 * @return One of the component
+	 */
+	public T get(int index);
+	
 }

@@ -13,7 +13,7 @@ import com.mathutil.sigmaTests.*;
 	TestSigma5.class, TestSigma6.class, TestSigma7.class , TestSigma8.class,
 	TestSigma9.class, TestSigma10.class,
 	TestRound1.class, TestRound2.class, TestRound3.class,
-	TestDist1.class, TestDist2.class
+	TestDist1.class
 	})
 public class AllTests {
 

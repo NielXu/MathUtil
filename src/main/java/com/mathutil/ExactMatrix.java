@@ -44,15 +44,6 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	/**The MathContext that will be applied in the calculations**/
 	private MathContext context;
 	
-	/**Save the rank**/
-	private int rank = -1001;
-	
-	/**Save the determinant**/
-	private BigDecimal det;
-	
-	/**-1001 for comparing**/
-	private BigDecimal nuller;
-	
 	/**
 	 * Create an empty matrix without any elements in it
 	 */
@@ -122,7 +113,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * @see #ExactMatrix(boolean, int, SuperVector...)
 	 */
 	public ExactMatrix(SuperVector...vectors){
-		this(true , 12 , vectors);
+		this(true , DEFAULT_PRECISION , vectors);
 	}
 	
 	/**
@@ -132,7 +123,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * @param matrix - The two dimensional BigDecimal array represents the matrix
 	 */
 	public ExactMatrix(BigDecimal[][] matrix){
-		this(matrix , 12);
+		this(matrix ,  DEFAULT_PRECISION);
 	}
 	
 	/**
@@ -169,7 +160,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * @param matrix - The two dimensional String array represents the matrix
 	 */
 	public ExactMatrix(String[][] matrix){
-		this(matrix , 12);
+		this(matrix ,  DEFAULT_PRECISION);
 	}
 	
 	/**
@@ -207,7 +198,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * @param matrix - The two dimensional Number array represents the matrix
 	 */
 	public ExactMatrix(Number[][] matrix){
-		this(matrix , 12);
+		this(matrix ,  DEFAULT_PRECISION);
 	}
 	
 	/**
@@ -244,8 +235,6 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 		cols = matrix[0].length;
 		string_decimal_places = 3;
 		context = new MathContext(precision , RoundingMode.HALF_UP);
-		det = new BigDecimal("-1001");
-		nuller = new BigDecimal("-1001");
 	}
 	
 	/**
@@ -710,8 +699,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 		if(getRows() != getCols())
 			throw new MatrixCalculationException("Only square matrix has determinant");
 		
-		det = determinant(matrix); //Save the determinant
-		return det;
+		return determinant(matrix);
 	}
 	
 	/**
@@ -737,19 +725,16 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	 * @return The rank of the matrix
 	 */
 	public int rank(){
-		if(rank == -1001){
-			BigDecimal[][] m = calculateRREF();
-			int rank = 0 , zeros = 0;
-			for(int i=0;i<m.length;i++){
-				for(int j=0;j<m[0].length;j++){
-					if(m[i][j].compareTo(BigDecimal.ZERO) == 0)
-						zeros++;
-				}
-				if(zeros != cols)
-					rank++;
-				zeros = 0;
+		BigDecimal[][] m = calculateRREF();
+		int rank = 0 , zeros = 0;
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m[0].length;j++){
+				if(m[i][j].setScale(6, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) == 0)
+					zeros++;
 			}
-			this.rank = rank;
+			if(zeros != cols)
+				rank++;
+			zeros = 0;
 		}
 		return rank;
 	}
@@ -819,7 +804,7 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 			}
 			i = row;
 			
-			while (!quit && matrix[i][lead].compareTo(BigDecimal.ZERO) == 0){
+			while (!quit && matrix[i][lead].setScale(6, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) == 0){
 				i++;
 				if (rowCount == i){
 					i = row;
@@ -873,36 +858,33 @@ public class ExactMatrix implements Matrixable<BigDecimal>{
 	
 	//Find the determinant recursively
 	private BigDecimal determinant(BigDecimal[][] arr) {
-		if(det.compareTo(nuller) == 0){
-			BigDecimal result = new BigDecimal("0");
-			if (arr.length == 1) {
-				return arr[0][0];
-			}
-			if (arr.length == 2) {
-				BigDecimal num1 = arr[0][0].multiply(arr[1][1] , context);
-				BigDecimal num2 = arr[0][1].multiply(arr[1][0] , context);
-				result = num1.subtract(num2);
-				return result;
-			}
-			for (int i=0; i<arr[0].length;i++) {
-				BigDecimal temp[][] = new BigDecimal[arr.length - 1][arr[0].length - 1];
-				for (int j=1;j<arr.length;j++) {
-					for (int k=0;k<arr[0].length;k++) {
-						if (k < i) {
-							temp[j-1][k] = arr[j][k];
-						} 
-						else if (k > i) {
-							temp[j-1][k-1] = arr[j][k];
-						}
-					}
-				}
-				BigDecimal num1 = arr[0][i];
-				BigDecimal num2 = new BigDecimal(Math.pow(-1 , (int)i));
-				result = result.add(num1.multiply(num2 , context).multiply(determinant(temp) , context) , context);
-			}
+		BigDecimal result = new BigDecimal("0");
+		if (arr.length == 1) {
+			return arr[0][0];
+		}
+		if (arr.length == 2) {
+			BigDecimal num1 = arr[0][0].multiply(arr[1][1] , context);
+			BigDecimal num2 = arr[0][1].multiply(arr[1][0] , context);
+			result = num1.subtract(num2);
 			return result;
 		}
-		return det;
+		for (int i=0; i<arr[0].length;i++) {
+			BigDecimal temp[][] = new BigDecimal[arr.length - 1][arr[0].length - 1];
+			for (int j=1;j<arr.length;j++) {
+				for (int k=0;k<arr[0].length;k++) {
+					if (k < i) {
+						temp[j-1][k] = arr[j][k];
+					} 
+					else if (k > i) {
+						temp[j-1][k-1] = arr[j][k];
+					}
+				}
+			}
+			BigDecimal num1 = arr[0][i];
+			BigDecimal num2 = new BigDecimal(Math.pow(-1 , (int)i));
+			result = result.add(num1.multiply(num2 , context).multiply(determinant(temp) , context) , context);
+		}
+		return result;
 	}
 	
 	//Invert

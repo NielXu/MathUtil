@@ -11,8 +11,8 @@ import com.mathutil.exceptions.SuperVectorException;
 /**
  * SuperVector is a class that allows one to create a n-dimensional vector: [p1,p2,p3...pn], and the components can be modified 
  * through <code>setComponent(int,double)</code>. The components are stored using double type for higher accurancy. 
- * And the distance between two vector(They must have the same dimension) can be calculated by {@link MathUtil#dist(SuperVector, SuperVector)} 
- * in {@link MathUtil} class.
+ * And the distance between two vector(They must have the same dimension) can be calculated by {@link Linear#dist(SuperVector, SuperVector)}
+ * in {@link Linear} class.
  * @author danielxu
  */
 public class SuperVector implements MatrixVector{
@@ -30,6 +30,10 @@ public class SuperVector implements MatrixVector{
 		dimension = 0;
 	}
 	
+	/**
+	 * Convert a row matrix to the supervector. Only matrices that have one row can be converted to SuperVector.
+	 * @param m - The row matrix
+	 */
 	public SuperVector(ExactMatrix m){
 		if(m == null)
 			throw new SuperVectorException("Matrix cannot be null");
@@ -101,6 +105,11 @@ public class SuperVector implements MatrixVector{
 	public Double[] getComponents() {
 		return compo == null ? null : Arrays.copyOf(compo, compo.length);
 	}
+	
+	public Double get(int index) {
+		indexCheck(index);
+		return compo[index];
+	}
 
 	/**
 	 * Get the dimension of the vector, it's the same as saying, the number 
@@ -118,7 +127,6 @@ public class SuperVector implements MatrixVector{
 	public ExactMatrix convertExactMatrix() {
 		return new ExactMatrix(this);
 	}
-
 	
 	/**
 	 * Get the String that represents the vector. The String will start with <i>[</i> and then there is 

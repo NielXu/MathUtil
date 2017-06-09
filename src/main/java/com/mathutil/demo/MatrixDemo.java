@@ -1,10 +1,12 @@
 package com.mathutil.demo;
 
 import com.mathutil.ExactMatrix;
+import com.mathutil.MathUtil;
 import com.mathutil.Matrix;
 import com.mathutil.SimpleMatrix;
 import com.mathutil.linearalgebra.Linear;
 import com.mathutil.linearalgebra.Solution;
+import com.mathutil.linearalgebra.SuperVector;
 
 public class MatrixDemo {
 
@@ -85,14 +87,14 @@ public class MatrixDemo {
 		
 		//3 * 3
 		ExactMatrix k1 = new ExactMatrix(new String[][]{
-			{"2" , "3" , "1"},
-			{"0" , "4" , "2"},
-			{"1" , "5" , "2"},
+			{"1" , "2" , "3"},
+			{"4" , "5" , "6"},
+			{"7" , "8" , "9"},
 		});
 		//1 * 3
 		ExactMatrix k2 = new ExactMatrix(new String[][]{
-			{"2"},
-			{"3"},
+			{"0"},
+			{"0"},
 			{"0"},
 		});
 		Linear.printEqs(k1, k2, "x", "y", "z");                //Print out the equations
@@ -100,10 +102,21 @@ public class MatrixDemo {
 		System.out.println(s.getSolutionCase());               //Print out the Solution case
 		System.out.println(s);                                 //Print out the solutions
 		//From row 0 to row 1, from column 1 to column 2 (index start with 0)
-		System.out.println(k1.subMatrix(0, 1, 1, 2));          //Get the subMatrix from the matrix and display it
+		//System.out.println(k1.subMatrix(0, 1, 1, 2));          //Get the subMatrix from the matrix and display it
 		
 		k1.toMatrix();             //Convert a ExactMatrix to a Matrix
 		m4.toExactMatrix();        //Convert a Matrix to a ExactMatrix
+		
+		//Randomize the matrices and solve them
+		//ExactMatrix q1 = ExactMatrix.randomMatrix(3, 3, 1, 20, true);
+		//ExactMatrix q2 = ExactMatrix.randomMatrix(3, 1, 0, 30, true);
+		//Linear.printEqs(q1, q2, "x","y","z");
+		//System.out.println(Linear.solve(q1, q2, "x","y","z"));
+		
+		SuperVector v1 = new SuperVector(1,2,3);
+		SuperVector v2 = new SuperVector(4,5,6);
+		double ang = Linear.angle(v1, v2);
+		System.out.println(ang);
 	}
 	
 }

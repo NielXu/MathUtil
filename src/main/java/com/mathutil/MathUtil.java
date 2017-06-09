@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.mathutil.exceptions.CalculationException;
-import com.mathutil.linearalgebra.SuperVector;
 
 /**
  * MathUtil contains few math functinons that are very helpful, such as <code>round(double val , int places)</code> , 
@@ -18,31 +17,6 @@ public class MathUtil{
 	
 	/**No instance**/
 	private MathUtil(){}
-	
-	/**
-	 * Calculate the Euclidean distance between two vectors. The two vectors must have the same dimensions in order to 
-	 * do the calculation. The formula for euclidean distance:<br>
-	 * <center>dist(v1,v2) = dist(v2,v1) = √((p1-q1)^2 + (p2-q2)^2 + (p3-q3)^2 + ... + (pn-qn)^2)</center>
-	 * @param v1 - Vector1
-	 * @param v2 - Vector2
-	 * @return The Euclidean distance between this two vectors
-	 * @see SuperVector
-	 */
-	public static double dist(SuperVector v1 , SuperVector v2){
-		if(v1 == null || v2 == null)
-			throw new CalculationException("The vectos cannot be null");
-		if(v1.getDimension() != v2.getDimension())
-			throw new CalculationException("The dimension of the vectors must be the same");
-		
-		double sum = 0;
-		Double[] c1 = v1.getComponents();
-		Double[] c2 = v2.getComponents();
-		
-		for(int i=0;i<c1.length;i++){
-			sum += Math.pow(c1[i] - c2[i], 2);
-		}
-		return Math.sqrt(sum);
-	}
 	
 	/**
 	 * Round a double value to the given decimal places. 0 will be ignored, for example round 1.3499 to 

@@ -31,9 +31,6 @@ public class Matrix implements Matrixable<Number>{
 	/**The number of rows and columns**/
 	private int rows , cols;
 	
-	/**Save the rank**/
-	private int rank = -1001;
-	
 	/**
 	 * Create an empty matrix that has no elements in it
 	 */
@@ -566,19 +563,16 @@ public class Matrix implements Matrixable<Number>{
 	 * @return The rank of the matrix
 	 */
 	public int rank(){
-		if(rank == -1001){
-			double[][] m = calculateRREF();
-			int rank = 0 , zeros = 0;
-			for(int i=0;i<m.length;i++){
-				for(int j=0;j<m[0].length;j++){
-					if(m[i][j] == 0)
-						zeros++;
-				}
-				if(zeros != cols)
-					rank++;
-				zeros = 0;
+		double[][] m = calculateRREF();
+		int rank = 0 , zeros = 0;
+		for(int i=0;i<m.length;i++){
+			for(int j=0;j<m[0].length;j++){
+				if(m[i][j] == 0)
+					zeros++;
 			}
-			this.rank = rank;
+			if(zeros != cols)
+				rank++;
+			zeros = 0;
 		}
 		return rank;
 	}
