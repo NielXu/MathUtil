@@ -1,7 +1,7 @@
 package com.mathutil.linearalgebra;
 
-import com.mathutil.ExactMatrix;
-import com.mathutil.Matrix;
+import com.mathutil.linearalgebra.matrix.ExactMatrix;
+import com.mathutil.linearalgebra.matrix.Matrix;
 
 /**
  * The vector that can be converted to a row matrix. Can be converted to Matrix or ExactMatrix.

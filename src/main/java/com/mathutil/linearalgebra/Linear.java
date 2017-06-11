@@ -3,11 +3,11 @@ package com.mathutil.linearalgebra;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.mathutil.ExactMatrix;
-import com.mathutil.Matrix;
 import com.mathutil.exceptions.LinearException;
 import com.mathutil.exceptions.MatrixCalculationException;
 import com.mathutil.exceptions.SuperVectorException;
+import com.mathutil.linearalgebra.matrix.ExactMatrix;
+import com.mathutil.linearalgebra.matrix.Matrix;
 
 /**
  * Linear class contains few functions that can help to solve the linear equations, it uses Matrix or ExactMatrix to solve the equations. 
@@ -436,8 +436,6 @@ public class Linear {
 		}
 		else{
 			sol = new Solution(SolutionCase.INFINITE);
-			System.out.println("RREF");
-			printEqs(coff.rref() , res , vars);
 		}
 		return sol;
 	}

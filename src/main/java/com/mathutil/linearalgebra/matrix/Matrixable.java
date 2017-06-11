@@ -1,4 +1,4 @@
-package com.mathutil;
+package com.mathutil.linearalgebra.matrix;
 
 /**
  * All the basic functions that a matrix should have.

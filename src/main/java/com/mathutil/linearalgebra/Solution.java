@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mathutil.ExactMatrix;
-import com.mathutil.Matrix;
+import com.mathutil.linearalgebra.matrix.ExactMatrix;
+import com.mathutil.linearalgebra.matrix.Matrix;
 
 /**
  * A solution, contains the {@link SolutionCase} and the results. Please notice that not every system can be solved, 
@@ -175,9 +175,11 @@ public class Solution {
 		StringBuilder sb = new StringBuilder();
 		for(int i=0;i<vars.length;i++){
 			if(exactMatrix)
-				sb.append(vars[i]+" = "+exactMap.get(vars[i])+"\n");
+				sb.append(vars[i]+" = "+exactMap.get(vars[i]));
 			else
-				sb.append(vars[i]+" = "+matrixMap.get(vars[i])+"\n");
+				sb.append(vars[i]+" = "+matrixMap.get(vars[i]));
+			if(i != vars.length-1)
+				sb.append("\n");
 		}
 		
 		return sb.toString();

@@ -1,4 +1,4 @@
-package com.mathutil;
+package com.mathutil.linearalgebra.matrix;
 
 import com.mathutil.exceptions.MatrixException;
 
@@ -149,7 +149,8 @@ public class SimpleMatrix<T> implements Matrixable<T>{
 			for(int j=0;j<matrix[0].length;j++){
 				result.append(matrix[i][j]+"\t");
 			}
-			result.append("\n");
+			if(i != matrix.length-1)
+				result.append("\n");
 		}
 		return result.toString();
 	}

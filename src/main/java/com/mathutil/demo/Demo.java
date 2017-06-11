@@ -1,14 +1,13 @@
 package com.mathutil.demo;
 
-import com.mathutil.ExactMatrix;
-import com.mathutil.MathUtil;
-import com.mathutil.Matrix;
-import com.mathutil.SimpleMatrix;
+import com.mathutil.calculus.Calculus;
 import com.mathutil.linearalgebra.Linear;
 import com.mathutil.linearalgebra.Solution;
-import com.mathutil.linearalgebra.SuperVector;
+import com.mathutil.linearalgebra.matrix.ExactMatrix;
+import com.mathutil.linearalgebra.matrix.Matrix;
+import com.mathutil.linearalgebra.matrix.SimpleMatrix;
 
-public class MatrixDemo {
+public class Demo {
 
 	public static void main(String[] args){
 		new SimpleMatrix<String>();		//Create an empty SimpleMatrix
@@ -27,6 +26,7 @@ public class MatrixDemo {
 		m3.switchCol(0, 1); 				//Switch column 1 and column 2 in the matrix
 		m3.switchRow(2, 1); 				//Switch row 2 and row 3 in the matrix
 		System.out.println(m3);				//Display the matrix
+		System.out.println("============================================");
 		
 		
 		//Matrix also implements Matrixable interface, it means the methods above can also be used in Matrix
@@ -58,8 +58,10 @@ public class MatrixDemo {
 		m4.transpose();						//Transpose the matrix A
 		m4.rref();                          //Get the rref of the matrix A
 		m4.rank();                          //Find the rank of the matrix A
-		System.out.println(); 			    //Display the matrix A
+		System.out.println(m4); 			//Display the matrix A
+		System.out.println();
 		System.out.println(m5); 			//Display the matrix B
+		System.out.println("============================================");
 		
 		//ExactMatrix is basically the same as Matrix, but it uses BigDecimal for calculations.
 		//It has two method that Matrix does not have called setShowDecimal and setPrecision.
@@ -81,6 +83,7 @@ public class MatrixDemo {
 		});
 		//β = (A^T * A)^-1 * A^T * B (β, in Multiple Linear Regression), and show 8 decimal places of the result
 		System.out.println(em1.transpose().multiply(em1).invert().multiply(em1.transpose()).multiply(em2).setShowDecimal(8));
+		System.out.println("============================================");
 		
 		Matrix.randomMatrix(4, 4, 1, 100, true);       //Create a new 4*4 random matrix, all the numbers are between 1 to 100, are all integers
 		ExactMatrix.randomMatrix(4, 4, 1, 100, true);  //The same as above
@@ -103,20 +106,23 @@ public class MatrixDemo {
 		System.out.println(s);                                 //Print out the solutions
 		//From row 0 to row 1, from column 1 to column 2 (index start with 0)
 		//System.out.println(k1.subMatrix(0, 1, 1, 2));          //Get the subMatrix from the matrix and display it
-		
-		k1.toMatrix();             //Convert a ExactMatrix to a Matrix
-		m4.toExactMatrix();        //Convert a Matrix to a ExactMatrix
+		System.out.println("============================================");
 		
 		//Randomize the matrices and solve them
-		//ExactMatrix q1 = ExactMatrix.randomMatrix(3, 3, 1, 20, true);
-		//ExactMatrix q2 = ExactMatrix.randomMatrix(3, 1, 0, 30, true);
-		//Linear.printEqs(q1, q2, "x","y","z");
-		//System.out.println(Linear.solve(q1, q2, "x","y","z"));
+		ExactMatrix q1 = ExactMatrix.randomMatrix(3, 3, 1, 20, true);
+		ExactMatrix q2 = ExactMatrix.randomMatrix(3, 1, 0, 30, true);
+		Linear.printEqs(q1, q2, "x","y","z");
+		System.out.println(Linear.solve(q1, q2, "x","y","z"));
+		System.out.println("============================================");
 		
-		SuperVector v1 = new SuperVector(1,2,3);
-		SuperVector v2 = new SuperVector(4,5,6);
-		double ang = Linear.angle(v1, v2);
-		System.out.println(ang);
+		//derivative
+		String func = "x*e*(1/2)^(-2)";
+		System.out.println(Calculus.dev(func, 2));                   //the derivative of the function at point x=2
+		
+		//The function is: f(x) = 2*x^2 + 1*x^2
+		//The derivative of the function is f'(x) = 4*x + 2*x
+		//the derivative of the function at point x=3
+		System.out.println(Calculus.devPoly(new double[]{2,2}, new double[]{2,1}, 3));
 	}
 	
 }

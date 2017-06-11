@@ -3,10 +3,9 @@ package com.mathutil.linearalgebra;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import com.mathutil.ExactMatrix;
-import com.mathutil.MathUtil;
-import com.mathutil.Matrix;
 import com.mathutil.exceptions.SuperVectorException;
+import com.mathutil.linearalgebra.matrix.ExactMatrix;
+import com.mathutil.linearalgebra.matrix.Matrix;
 
 /**
  * SuperVector is a class that allows one to create a n-dimensional vector: [p1,p2,p3...pn], and the components can be modified 
