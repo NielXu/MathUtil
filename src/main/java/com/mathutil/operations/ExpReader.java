@@ -28,8 +28,8 @@ public class ExpReader {
 	 * @return The result
 	 */
 	public static double calculate(String exp){
-		if(!check(exp)) throw new ExpressionException("Parenthesis missing in the expression");
 		if(exp == null || exp.equals("")) throw new ExpressionException("Expression cannot be null or empty");
+		if(!check(exp)) throw new ExpressionException("Parenthesis missing in the expression");
 		
 		//Repalce whitespaces and some special notations
 		exp = exp.replace(" ", "");

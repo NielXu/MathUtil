@@ -109,20 +109,15 @@ public class Demo {
 		System.out.println("============================================");
 		
 		//Randomize the matrices and solve them
-		ExactMatrix q1 = ExactMatrix.randomMatrix(3, 3, 1, 20, true);
-		ExactMatrix q2 = ExactMatrix.randomMatrix(3, 1, 0, 30, true);
-		Linear.printEqs(q1, q2, "x","y","z");
-		System.out.println(Linear.solve(q1, q2, "x","y","z"));
-		System.out.println("============================================");
+		//ExactMatrix q1 = ExactMatrix.randomMatrix(3, 3, 1, 20, true);
+		//ExactMatrix q2 = ExactMatrix.randomMatrix(3, 1, 0, 30, true);
+		//Linear.printEqs(q1, q2, "x","y","z");
+		//System.out.println(Linear.solve(q1, q2, "x","y","z"));
+		//System.out.println("============================================");
 		
 		//derivative
-		String func = "x*e*(1/2)^(-2)";
-		System.out.println(Calculus.dev(func, 2));                   //the derivative of the function at point x=2
-		
-		//The function is: f(x) = 2*x^2 + 1*x^2
-		//The derivative of the function is f'(x) = 4*x + 2*x
-		//the derivative of the function at point x=3
-		System.out.println(Calculus.devPoly(new double[]{2,2}, new double[]{2,1}, 3));
+		String func = "";
+		System.out.println(Calculus.dev(func, 2));   //the derivative of the function at point x=2
 	}
 	
 }

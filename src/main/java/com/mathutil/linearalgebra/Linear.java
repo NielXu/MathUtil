@@ -133,7 +133,7 @@ public class Linear {
 	/**
 	 * Get the dot product of two vectors, they must have the same dimension. The result of the dot product is always a scalar, 
 	 * which represents by a double. The formula is:
-	 * <center>a·b = a1*b1 + a2+b2 + a3*b3 + ... + an*bn</center>
+	 * <center>a·b = a1*b1 + a2*b2 + a3*b3 + ... + an*bn</center>
 	 * Another method to calculate the dot product is {@link #dot(SuperVector, SuperVector , double)}
 	 * 
 	 * @param v1 - The first vector
@@ -312,7 +312,7 @@ public class Linear {
 					Matrix m = coff.invert().multiply(res);
 					sol = new Solution(SolutionCase.ONLY , m, vars);
 				}
-				//If it's 0, use Gauss-Jordan elimination
+				//If the determinant is 0
 				else{
 					sol = new Solution(SolutionCase.ONLY);
 				}
