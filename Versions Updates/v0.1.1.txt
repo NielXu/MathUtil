@@ -1,4 +1,4 @@
-Version 1.0.1:
+Version 0.1.1:
 
 Finished the Calculus class, it can now calculate the derivative or integral of a function. Most of the
 results are only approximations, and might not be too accurate. For more informations, please check out the
