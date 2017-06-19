@@ -1,11 +1,13 @@
 package com.mathutil.operations;
 
+import java.math.BigDecimal;
+
 /**
  * Calculating the sum using Sigma notation.
  * @author danielxu
  */
 public class Sigma {
-
+	
 	private Sigma() {}
 	
 	/**
@@ -84,10 +86,16 @@ public class Sigma {
 	private static double calculate(double low , double high , String exp , double incre){
 		double result = 0d;
 		String expression;
-		for(double i = low ;i <= high ;i+=incre){
+		
+		BigDecimal lowBound = new BigDecimal(String.valueOf(low));
+		BigDecimal highBound = new BigDecimal(String.valueOf(high));
+		BigDecimal increment = new BigDecimal(String.valueOf(incre));
+		
+		for(BigDecimal i = lowBound ;i.compareTo(highBound) == 0 || i.compareTo(highBound) == -1; i=i.add(increment)){
 			expression = exp.replace("x", String.valueOf(i)); //Replace the variable x to a specific value
 			result += ExpReader.calculate(expression);
 		}
+		
 		return result;
 	}
 	
@@ -97,7 +105,12 @@ public class Sigma {
 	private static long calculate_long(double low , double high , String exp, double incre){
 		long result = 0l;
 		String expression;
-		for(double i = low ;i <= high ;i+=incre){
+		
+		BigDecimal lowBound = new BigDecimal(String.valueOf(low));
+		BigDecimal highBound = new BigDecimal(String.valueOf(high));
+		BigDecimal increment = new BigDecimal(String.valueOf(incre));
+		
+		for(BigDecimal i = lowBound ;i.compareTo(highBound) == 0 || i.compareTo(highBound) == -1;i=i.add(increment)){
 			expression = exp.replace("x", String.valueOf(i)); //Replace the variable x to a specific value
 			result += ExpReader.calculate(expression);
 		}

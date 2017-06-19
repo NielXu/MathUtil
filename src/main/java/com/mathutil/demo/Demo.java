@@ -115,9 +115,13 @@ public class Demo {
 		//System.out.println(Linear.solve(q1, q2, "x","y","z"));
 		//System.out.println("============================================");
 		
-		//derivative
-		String func = "";
-		System.out.println(Calculus.dev(func, 2));   //the derivative of the function at point x=2
+		String func = "x^(-2)+2";
+		System.out.println(Calculus.integ_riemann_left(func, 1, 3, 10));      //Using left riemann sum
+		System.out.println(Calculus.integ_riemann_right(func, 1, 3, 10));     //Using right riemann sum
+		System.out.println(Calculus.integ_riemann_mid(func, 1, 3, 10));       //Using mid point riemann sum
+		System.out.println(Calculus.integ_riemann_trapezoid(func, 1, 3, 10)); //Using trapezoid rule
+		//The cofficients of the function is 1,2 , the degrees are -2 , 0
+		System.out.println(Calculus.integPoly(new double[]{1,2}, new double[]{-2,0}, 1, 3));  //Calculate the exact value
 	}
 	
 }

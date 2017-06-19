@@ -82,9 +82,9 @@ public class Calculus {
 	}
 	
 	/**
-	 * Calculate the integral of the funciton in the given range using Riemann Sum. The formula of Riemann Sum is:
-	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi*)(x-xi) ) , xi-1 <= xi <= xi</center>
-	 * The more parts that the area be divided, the more accurate the result will be, the recommend is 100. 
+	 * Calculate the integral of the funciton in the given range using left Riemann Sum. The formula of Riemann Sum is:
+	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi)(xi-x(i-1)) ) , xi-1 <= xi* <= xi</center>
+	 * The more parts that the area be divided, the more accurate the result will be, the recommend value is 100. 
 	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
 	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
 	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
@@ -95,7 +95,7 @@ public class Calculus {
 	 * @param parts - How many parts the area will be divided, recommend is 100
 	 * @return The approximated integral evaluated by Reimann Sum
 	 */
-	public static double integ_riemann(String func , double low , double high , int parts){
+	public static double integ_riemann_left(String func , double low , double high , int parts){
 		if(low == high)
 			return 0;
 		
@@ -107,10 +107,97 @@ public class Calculus {
 			neg = true;
 		}
 		
-		double sum = Sigma.sum(low, high, func, (high-low)/parts)* ((high-low)/parts);
+		double dx = (high-low)/parts;
+		double sum = Sigma.sum(low, high-dx, func, dx)* dx;
 		
 		return neg? -sum : sum;
 	}
+	
+	/**
+	 * Calculate the integral of the funciton in the given range using right Riemann Sum. The formula of Riemann Sum is:
+	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi*)(xi-x(i-1)) ) , x(i-1) <= xi* <= xi</center>
+	 * The more parts that the area be divided, the more accurate the result will be, the recommend value is 100. 
+	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
+	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
+	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
+	 * 
+	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
+	 * @param low - The lower bound, a
+	 * @param high - The upper bound, b
+	 * @param parts - How many parts the area will be divided, recommend is 100
+	 * @return The approximated integral evaluated by Reimann Sum
+	 */
+	public static double integ_riemann_right(String func , double low , double high , int parts){
+		if(low == high)
+			return 0;
+		
+		boolean neg = false;
+		if(low > high){
+			double temp = low;
+			low = high;
+			high = temp;
+			neg = true;
+		}
+		
+		double dx = (high-low)/parts;
+		double sum = Sigma.sum(low+dx, high, func, dx)*dx;
+		
+		return neg? -sum : sum;
+	}
+	
+	/**
+	 * Calculate the integral of the funciton in the given range using mid point Riemann Sum. The formula of Riemann Sum is:
+	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi)(xi-x(i-1)) ) , xi-1 <= xi* <= xi</center>
+	 * The more parts that the area be divided, the more accurate the result will be, the recommend is 100. 
+	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
+	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
+	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
+	 * 
+	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
+	 * @param low - The lower bound, a
+	 * @param high - The upper bound, b
+	 * @param parts - How many parts the area will be divided, recommend is 100
+	 * @return The approximated integral evaluated by Reimann Sum
+	 */
+	public static double integ_riemann_mid(String func , double low , double high , int parts){
+		if(low == high)
+			return 0;
+		
+		boolean neg = false;
+		if(low > high){
+			double temp = low;
+			low = high;
+			high = temp;
+			neg = true;
+		}
+		
+		double dx = (high-low)/parts;
+		double sum = Sigma.sum((low+low+dx)/2, high, func, dx)*dx;
+		
+		return neg? -sum : sum;
+	}
+	
+	public static double integ_riemann_trapezoid(String func , double low , double high , int parts){
+		if(low == high)
+			return 0;
+		
+		boolean neg = false;
+		if(low > high){
+			double temp = low;
+			low = high;
+			high = temp;
+			neg = true;
+		}
+		
+		double dx = (high-low)/parts;
+		double sum = Sigma.sum(low+dx, high-dx, func, dx)*2;
+		sum += ExpReader.calculate(func.replace("x", String.valueOf(low)));
+		sum += ExpReader.calculate(func.replace("x", String.valueOf(high)));
+		sum *= dx/2;
+		
+		return neg? -sum : sum;
+	}
+	
 	
 	/**
 	 * Calculate the integral of the function in the given range using Simpson's Rule. The formula of Simpson's Rule is:
@@ -122,7 +209,7 @@ public class Calculus {
 	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
 	 * @param low - The lower bound, a
 	 * @param high - The upper bound, b
-	 * @param parts - How many parts, must be an even number according to Simpson's Rule
+	 * @param parts - How many parts, must be an even number according to Simpson's Rule. Usually 4 is recommended
 	 * @return The approximated integral evaluated by Simpson's Rule
 	 */
 	public static double integ_simpson(String func , double low , double high , double parts){

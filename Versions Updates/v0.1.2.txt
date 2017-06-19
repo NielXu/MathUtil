@@ -1,0 +1,6 @@
+Version 0.1.2:
+
+Added left riemann sum, right riemann sum, mid point riemann sum and the trapezoid rule to calculate the
+integral. Added test cases 1-4 for Calculus class, but still need more test cases.
+Fixed Sigma class, now the Sigma calculation will use BigDecimal to store the boundaries and increment in
+order to reduce the accuracy loss.
