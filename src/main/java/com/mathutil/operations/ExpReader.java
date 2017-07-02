@@ -2,6 +2,7 @@ package com.mathutil.operations;
 
 import java.util.Stack;
 
+import com.mathutil.MathUtil;
 import com.mathutil.exceptions.ExpressionException;
 
 /**
@@ -15,7 +16,7 @@ public class ExpReader {
 	 * Do the calculation and return the double as the result. The variable name must be x, and spaces are allowed in the experssion 
 	 * since they will be removed in the calculation process.<br><br>
 	 * 
-	 * Accept operations: (), +, -, *, /, ^, abs(), sin(), cos()<br>
+	 * Accept operations: (), +, -, *, /, ^, abs(), sin(), cos(), ln(), lg()<br>
 	 * Accept special numbers: pi, e<br><br>
 	 * 
 	 * Special cases:
@@ -33,10 +34,13 @@ public class ExpReader {
 		
 		//Repalce whitespaces and some special notations
 		exp = exp.replace(" ", "");
-		exp = exp.replace("sin(", "~"); //Replace sin( to ~
-		exp = exp.replace("cos(", "&"); //Replace cos( to &
-		exp = exp.replace("tan(", "@"); //Repalce tan( to @
-		exp = exp.replace("abs(", "`"); //Replace abs( to `
+		exp = exp.replace("E-", "1/10^"); //Replace E-n to 1/10^n, this will happen when the number is really small
+		exp = exp.replace("sin(", "~");   //Replace sin( to ~
+		exp = exp.replace("cos(", "&");   //Replace cos( to &
+		exp = exp.replace("tan(", "@");   //Repalce tan( to @
+		exp = exp.replace("abs(", "`");   //Replace abs( to `
+		exp = exp.replace("ln(", "%");    //Replace ln( to %
+		exp = exp.replace("lg(", "#");    //Replace lg( to #
 		exp = exp.replace("e", String.valueOf(Math.E)); //Replace 'e' to natural number e
 		exp = exp.replace("pi", String.valueOf(Math.PI));//Replace 'pi' to pi
 		//Modify -x to 0-x
@@ -72,15 +76,12 @@ public class ExpReader {
 				vals.push(Double.parseDouble(sb.toString()));
 			}
 			//If it is (, push it onto the operations stack
-			else if(tokens[i] == '(' || tokens[i] == '~' || tokens[i] == '&' || tokens[i] == '@' || tokens[i] == '`'){
+			else if(tokens[i] == '(' || tokens[i] == '~' || tokens[i] == '&' || tokens[i] == '@' || tokens[i] == '`' || tokens[i] == '#' || tokens[i] == '%'){
 				ops.push(tokens[i]);
 			}
 			//If it is ), find the closest ( to solve
 			else if(tokens[i] == ')'){
 				while(ops.peek() != '('){
-					if(!ops.isEmpty() && !vals.empty() && vals.size() > 1){
-						vals.push(operation(ops.pop() , vals.pop() , vals.pop())); //Do the operation, push the result to the value stack
-					}
 					//If it is a sin operator
 					if(ops.peek() == '~'){
 						double val = vals.pop();
@@ -99,17 +100,34 @@ public class ExpReader {
 						vals.push(Math.tan(val));
 						break;
 					}
+					//If it is abs operator
 					else if(ops.peek() == '`'){
 						double val = vals.pop();
 						vals.push(Math.abs(val));
 						break;
+					}
+					//If it is a ln operator
+					else if(ops.peek() == '%'){
+						double val = vals.pop();
+						vals.push(MathUtil.ln(val));
+						break;
+					}
+					//If it is a lg operator
+					else if(ops.peek() == '#'){
+						double val = vals.pop();
+						vals.push(Math.log10(val));
+						break;
+					}
+					else if(!ops.isEmpty() && !vals.empty() && vals.size() > 1){
+						vals.push(operation(ops.pop() , vals.pop() , vals.pop())); //Do the operation, push the result to the value stack
 					}
 				}
 				ops.pop();
 			}
 			//If it is the operator
 			else if(tokens[i] == '+' || tokens[i] == '-' || tokens[i] == '*' || tokens[i] == '/' || tokens[i] == '^'){
-				while (!ops.empty() && ops.peek() != '~' && ops.peek() != '&' && ops.peek() != '@'&& ops.peek() != '`' && hasPrecedence(tokens[i], ops.peek())){
+				while (!ops.empty() && ops.peek() != '~' && ops.peek() != '&' && ops.peek() != '@'&& ops.peek() != '`' 
+						&& ops.peek() != '#' && ops.peek() != '%' && hasPrecedence(tokens[i], ops.peek())){
 					vals.push(operation(ops.pop(), vals.pop(), vals.pop()));
 				}
 				

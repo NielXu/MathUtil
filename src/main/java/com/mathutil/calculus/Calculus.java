@@ -84,7 +84,7 @@ public class Calculus {
 	/**
 	 * Calculate the integral of the funciton in the given range using left Riemann Sum. The formula of Riemann Sum is:
 	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi)(xi-x(i-1)) ) , xi-1 <= xi* <= xi</center>
-	 * The more parts that the area be divided, the more accurate the result will be, the recommend value is 100. 
+	 * The more parts that the area be divided, the more accurate the result will be. 
 	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
 	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
 	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
@@ -116,7 +116,7 @@ public class Calculus {
 	/**
 	 * Calculate the integral of the funciton in the given range using right Riemann Sum. The formula of Riemann Sum is:
 	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi*)(xi-x(i-1)) ) , x(i-1) <= xi* <= xi</center>
-	 * The more parts that the area be divided, the more accurate the result will be, the recommend value is 100. 
+	 * The more parts that the area be divided, the more accurate the result will be. 
 	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
 	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
 	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
@@ -124,7 +124,7 @@ public class Calculus {
 	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
 	 * @param low - The lower bound, a
 	 * @param high - The upper bound, b
-	 * @param parts - How many parts the area will be divided, recommend is 100
+	 * @param parts - How many parts the area will be divided
 	 * @return The approximated integral evaluated by Reimann Sum
 	 */
 	public static double integ_riemann_right(String func , double low , double high , int parts){
@@ -148,7 +148,7 @@ public class Calculus {
 	/**
 	 * Calculate the integral of the funciton in the given range using mid point Riemann Sum. The formula of Riemann Sum is:
 	 * <center>b∫a f(x)dx = b∑(i=a) ( f(xi)(xi-x(i-1)) ) , xi-1 <= xi* <= xi</center>
-	 * The more parts that the area be divided, the more accurate the result will be, the recommend is 100. 
+	 * The more parts that the area be divided, the more accurate the result will be. 
 	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
 	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
 	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
@@ -156,7 +156,7 @@ public class Calculus {
 	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
 	 * @param low - The lower bound, a
 	 * @param high - The upper bound, b
-	 * @param parts - How many parts the area will be divided, recommend is 100
+	 * @param parts - How many parts the area will be divided
 	 * @return The approximated integral evaluated by Reimann Sum
 	 */
 	public static double integ_riemann_mid(String func , double low , double high , int parts){
@@ -177,6 +177,20 @@ public class Calculus {
 		return neg? -sum : sum;
 	}
 	
+	/**
+	 * Calculate the integral of the funciton in the given range using trapezoid rule. The formula of trapezoid rule is:
+	 * <center>b∫a f(x)dx = (dx/2)*(b∑(i=a) f(x1) + 2*f(x2) + ... + 2*f(x(n-1)) + f(xn))</center>
+	 * The more parts that the area be divided, the more accurate the result will be. 
+	 * Please notice that the result is only a approximation and might not be too accurate, it depends on the given parts. 
+	 * If the lower bound is greater than the upper bound, the result will be opposite according to:
+	 * <center>F(b) - F(a) = -a∫b f(x)dx, if a > b</center>
+	 * 
+	 * @param func - The function, see {@link ExpReader#calculate(String)} to check out the available operations.
+	 * @param low - The lower bound, a
+	 * @param high - The upper bound, b
+	 * @param parts - How many parts the area will be divided.
+	 * @return The approximated integral evaluated by Reimann Sum
+	 */
 	public static double integ_riemann_trapezoid(String func , double low , double high , int parts){
 		if(low == high)
 			return 0;

@@ -1,6 +1,7 @@
 package com.mathutil.demo;
 
 import com.mathutil.calculus.Calculus;
+import com.mathutil.grapher.Grapher;
 import com.mathutil.linearalgebra.Linear;
 import com.mathutil.linearalgebra.Solution;
 import com.mathutil.linearalgebra.matrix.ExactMatrix;
@@ -122,6 +123,9 @@ public class Demo {
 		System.out.println(Calculus.integ_riemann_trapezoid(func, 1, 3, 10)); //Using trapezoid rule
 		//The cofficients of the function is 1,2 , the degrees are -2 , 0
 		System.out.println(Calculus.integPoly(new double[]{1,2}, new double[]{-2,0}, 1, 3));  //Calculate the exact value
+		
+		//Plot function x^3
+		Grapher.plot("x^3");
 	}
 	
 }

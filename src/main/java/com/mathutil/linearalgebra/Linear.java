@@ -314,7 +314,7 @@ public class Linear {
 				}
 				//If the determinant is 0
 				else{
-					sol = new Solution(SolutionCase.ONLY);
+					sol = new Solution(SolutionCase.UNSOLVABLE);
 				}
 			}
 			//not full rank, infinite solutions

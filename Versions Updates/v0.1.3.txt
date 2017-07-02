@@ -1,0 +1,4 @@
+Version 0.1.3:
+
+Added a grapher package, it's a simple GUI that shows the function on the graph. This feature is still in
+test and may have bugs. Fixed a bug that lead expressions such as 2*sin(x) failed.
