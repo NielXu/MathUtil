@@ -124,8 +124,8 @@ public class Demo {
 		//The cofficients of the function is 1,2 , the degrees are -2 , 0
 		System.out.println(Calculus.integPoly(new double[]{1,2}, new double[]{-2,0}, 1, 3));  //Calculate the exact value
 		
-		//Plot function x^3
-		Grapher.plot("x^3");
+		//Plot functions, x, x^2 and x^3 on the same graph
+		Grapher.plot("x" , "x^2" , "x^3");
 	}
 	
 }

@@ -20,9 +20,9 @@ class GraphPane extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String exp;
+	private String[] exp;
 	
-	public GraphPane(int width , int height , String exp){
+	public GraphPane(int width , int height , String... exp){
 		this.setSize(width , height);
 		this.exp = exp;
 	}
@@ -106,35 +106,52 @@ class GraphPane extends JPanel{
 			g2d.fillRect(x_zero*x_scale, i*y_scale-y_min*y_scale-1, 2, 2);
 			if(Grapher.show_number){
 				if(i != 0){
-					g2d.drawString(""+i, x_zero*x_scale+5, i*y_scale-y_min*y_scale+5);
+					g2d.drawString(""+-i, x_zero*x_scale+5, i*y_scale-y_min*y_scale+5);
 				}
 			}
 		}
 		
-		//For every two values, choose few points
-		double[] px = new double[(x_max - x_min)*Grapher.points_between];
-		double[] py = new double[(x_max - x_min)*Grapher.points_between];
-		int index = 0;
-		double sep = 1.0/Grapher.points_between;
+		if(exp == null || exp.length == 0)
+			return;
 		
-		for(double i=x_min; i<=x_max; i+=sep){
-			if(index >= px.length)
-				break;
-			px[index] = i*x_scale;
-			py[index] = -ExpReader.calculate(exp.replace("x" , "("+String.valueOf(i)+")"))*y_scale;
-			index++;
-		}
-		
-		g2d.setColor(Grapher.function_color);
-		//Draw the function
-		Path2D path = new Path2D.Double();
-		for(int i=0;i<py.length;i++){
-			if(i == 0)
-				path.moveTo(px[i], py[i]);
-			path.lineTo(px[i], py[i]);
-		}
 		g2d.translate(x_zero*x_scale, y_zero*y_scale); //translate the origin
-		g2d.draw(path);
+		int color_index = 0;
+		for(int k=0;k<exp.length;k++){
+			//For every two values, choose few points
+			double[] px = new double[(x_max - x_min)*Grapher.points_between];
+			double[] py = new double[(x_max - x_min)*Grapher.points_between];
+			int index = 0;
+			double sep = 1.0/Grapher.points_between;
+			
+			//Calculate the values on the functions
+			for(double i=x_min; i<=x_max; i+=sep){
+				if(index >= px.length)
+					break;
+				px[index] = i*x_scale;
+				py[index] = -ExpReader.calculate(exp[k].replace("x" , "("+String.valueOf(i)+")"))*y_scale;
+				index++;
+			}
+			
+			//Set function color
+			if(Grapher.show_different_color){
+				if(color_index >= Grapher.function_colors.length)
+					color_index = 0;
+				g2d.setColor(Grapher.function_colors[color_index]);
+				color_index++;
+			}
+			else{
+				g2d.setColor(Grapher.function_colors[0]);
+			}
+			
+			//Draw the function
+			Path2D path = new Path2D.Double();
+			for(int i=0;i<py.length;i++){
+				if(i == 0)
+					path.moveTo(px[i], py[i]);
+				path.lineTo(px[i], py[i]);
+			}
+			g2d.draw(path);
+		}
 	}
 	
 }
